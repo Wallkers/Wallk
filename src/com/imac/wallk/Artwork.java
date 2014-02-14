@@ -2,6 +2,7 @@ package com.imac.wallk;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -43,6 +44,12 @@ public class Artwork extends ParseObject{
         put("photo", file);
     }
 	
+    public ParseGeoPoint getLocation(){
+    	return getParseGeoPoint("location");
+    }
 	
+    public void setLocation(ParseGeoPoint geoPoint) {
+        put("location", geoPoint);
+    }
 	
 }

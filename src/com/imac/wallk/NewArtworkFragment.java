@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseImageView;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -83,6 +84,8 @@ public class NewArtworkFragment extends Fragment{
 				// Add the rating
 				artwork.setRating(artworkRating.getSelectedItem().toString());
 
+				//Add the location
+				artwork.setLocation(new ParseGeoPoint(40.0, -30.0));
 				// If the user added a photo, that data will be
 				// added in the CameraFragment
 
