@@ -3,22 +3,19 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <!-- Framelayout to display Fragments -->
+    <!-- The main content view -->
     <FrameLayout
-        android:id="@+id/frame_container"
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <!-- Listview to display slider menu -->
-    <ListView
-        android:id="@+id/list_slidermenu"
-        android:layout_width="240dp"
+    <!-- The navigation drawer -->
+     <!-- should not be larger than 320 to show content -->
+    <ListView android:id="@+id/left_drawer"
+        android:layout_width="180dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        android:divider="@color/list_divider"
-        android:dividerHeight="1dp"        
-        android:listSelector="@drawable/list_selector"
-        android:background="@color/list_background"/>
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="#111"/>
 </android.support.v4.widget.DrawerLayout>
