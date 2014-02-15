@@ -26,7 +26,7 @@ public class ArtworkListActivity extends ListActivity{
 		// Subclass of ParseQueryAdapter
 		favoritesAdapter = new FavoriteArtworkAdapter(this);
 
-		// Default view is all meals
+		// Default view is all artworks
 		setListAdapter(mainAdapter);
 	}
 
@@ -37,7 +37,7 @@ public class ArtworkListActivity extends ListActivity{
 	}
 
 	/*
-	 * Posting meals and refreshing the list will be controlled from the Action
+	 * Posting artworks and refreshing the list will be controlled from the Action
 	 * Bar.
 	 */
 	@Override
@@ -55,9 +55,14 @@ public class ArtworkListActivity extends ListActivity{
 		}
 
 		case R.id.action_new: {
-			newMeal();
+			newArtwork();
 			break;
 		}
+		
+		case R.id.action_account: {
+			showAccountPage();
+		}
+		
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -72,8 +77,14 @@ public class ArtworkListActivity extends ListActivity{
 		setListAdapter(favoritesAdapter);
 	}
 
-	private void newMeal() {
+	private void newArtwork() {
 		Intent i = new Intent(this, NewArtworkActivity.class);
+		startActivityForResult(i, 0);
+	}
+	
+	private void showAccountPage() {
+		//autre chose que Dispat
+		Intent i = new Intent(this, DispatchActivity.class);
 		startActivityForResult(i, 0);
 	}
 

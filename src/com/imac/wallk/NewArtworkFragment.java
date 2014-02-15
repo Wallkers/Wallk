@@ -84,8 +84,11 @@ public class NewArtworkFragment extends Fragment{
 				// Add the rating
 				artwork.setRating(artworkRating.getSelectedItem().toString());
 
+				//ParseGeoPoint userLocation = (ParseGeoPoint) ParseUser.getCurrentUser().get("location");
+				
 				//Add the location
-				artwork.setLocation(new ParseGeoPoint(40.0, -30.0));
+				//artwork.setLocation(userLocation);
+				
 				// If the user added a photo, that data will be
 				// added in the CameraFragment
 

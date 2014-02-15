@@ -38,7 +38,9 @@ public class WallkApplication extends Application {
 		 * Learn more about the ParseUser class:
 		 * https://www.parse.com/docs/android_guide#users
 		 */
-		ParseUser.enableAutomaticUser();
+		//ParseUser.enableAutomaticUser();
+		//pour l'instant on déco l'user à chaque fois 
+		ParseUser.logOut();
 
 		/*
 		 * For more information on app security and Parse ACL:
