@@ -124,7 +124,6 @@ public class LoginActivity extends Activity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent = null;
 		switch (item.getItemId()) {
 		
 		case R.id.action_camera: {
@@ -133,18 +132,19 @@ public class LoginActivity extends Activity {
 		}
 
 		case R.id.action_map: {
-			//TODO
+			Intent intent = new Intent(this, MapActivity.class);
+			startActivity(intent);
 			break;
 		}
 
 		case R.id.action_gallery: {
-			intent = new Intent(this, GalleryActivity.class);
+			Intent intent = new Intent(this, GalleryActivity.class);
 			startActivity(intent);
 			break;
 		}
 
 		case R.id.action_account: {
-			intent = new Intent(this, LoginActivity.class);
+			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
 			break;
 		}

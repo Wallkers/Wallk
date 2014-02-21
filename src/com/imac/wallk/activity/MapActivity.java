@@ -1,22 +1,21 @@
 package com.imac.wallk.activity;
 
+import com.imac.wallk.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.imac.wallk.R;
-
-public class GalleryActivity extends Activity {
-	
+public class MapActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// hide the title in the action bar
         getActionBar().setDisplayShowTitleEnabled(false);
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.activity_gallery);
+		setContentView(R.layout.activity_map);
 	}
 	
 	@Override
