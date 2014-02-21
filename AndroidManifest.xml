@@ -60,7 +60,7 @@
         </activity>
         
         <activity
-            android:name=".DispatchActivity"
+            android:name="com.imac.wallk.DispatchActivity"
             android:noHistory="true" >
         </activity>
         
