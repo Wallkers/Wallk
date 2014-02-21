@@ -26,11 +26,11 @@ public class LoginActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		// hide the title in the action bar
+        getActionBar().setDisplayShowTitleEnabled(false);
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
-		// hide the title in the action bar
-		getActionBar().setDisplayShowTitleEnabled(false);
 
 		// Set up the login form.
 		usernameView = (EditText) findViewById(R.id.username);
@@ -120,8 +120,7 @@ public class LoginActivity extends Activity {
 	}
 
 	/*
-	 * Posting artworks and refreshing the list will be controlled from the
-	 * Action Bar.
+	 * Handler function for ActionBar's buttons click event
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -139,20 +138,17 @@ public class LoginActivity extends Activity {
 		}
 
 		case R.id.action_gallery: {
-			//TODO
+			intent = new Intent(this, GalleryActivity.class);
+			startActivity(intent);
 			break;
 		}
 
 		case R.id.action_account: {
-			intent = new Intent(this, LoginActivity.class); 
+			intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
 			break;
 		}
 
-		}
-		
-		// load another page
-		if(intent != null) {
-			startActivity(intent);
 		}
 		
 		return super.onOptionsItemSelected(item);
