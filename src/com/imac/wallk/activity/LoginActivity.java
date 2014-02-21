@@ -127,7 +127,8 @@ public class LoginActivity extends Activity {
 		switch (item.getItemId()) {
 		
 		case R.id.action_camera: {
-			//TODO
+			Intent intent = new Intent(this, CameraActivity.class);
+			startActivity(intent);
 			break;
 		}
 
@@ -144,8 +145,7 @@ public class LoginActivity extends Activity {
 		}
 
 		case R.id.action_account: {
-			Intent intent = new Intent(this, LoginActivity.class);
-			startActivity(intent);
+			// Don't open himself
 			break;
 		}
 

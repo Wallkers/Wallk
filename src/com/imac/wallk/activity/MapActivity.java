@@ -32,13 +32,13 @@ public class MapActivity extends Activity {
 		switch (item.getItemId()) {
 		
 		case R.id.action_camera: {
-			//TODO
+			Intent intent = new Intent(this, CameraActivity.class);
+			startActivity(intent);
 			break;
 		}
 
 		case R.id.action_map: {
-			Intent intent = new Intent(this, MapActivity.class);
-			startActivity(intent);
+			// Don't open himself
 			break;
 		}
 
