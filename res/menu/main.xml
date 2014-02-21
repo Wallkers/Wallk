@@ -1,9 +1,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+    
+    <item 
+        android:id="@+id/action_camera"
+        android:showAsAction="always"
+        android:title="@string/action_camera"
+        android:icon="@drawable/ic_action_camera"/>
+    
+    <item 
+        android:id="@+id/action_map"
+        android:showAsAction="always"
+        android:title="@string/action_map"
+        android:icon="@drawable/ic_action_place"/>
+    
+    <item 
+        android:id="@+id/action_gallery"
+        android:showAsAction="always"
+        android:title="@string/action_gallery"
+        android:icon="@drawable/ic_action_view_as_grid"/>
+    
+    <item 
+        android:showAsAction="always"
+        android:title="@string/action_account"
+        android:icon="@drawable/ic_action_person_w">
+        
+        <menu>
+            <item
+                android:id="@+id/action_action_account"
+                android:title="@string/log_in" />
+        </menu>
+    </item>
 
 </menu>

@@ -1,9 +1,12 @@
 package com.imac.wallk;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,6 +18,7 @@ import com.parse.ParseUser;
 /**
  * Activity which displays a login screen to the user
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LoginActivity extends Activity {
   // UI references.
   private EditText usernameView;
@@ -23,8 +27,10 @@ public class LoginActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    
     setContentView(R.layout.activity_login);
+    // hide the title in the action bar
+ 	getActionBar().setDisplayShowTitleEnabled(false);
 
     // Set up the login form.
     usernameView = (EditText) findViewById(R.id.username);
@@ -83,7 +89,13 @@ public class LoginActivity extends Activity {
       }
     });
   }
-
+  
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+	getMenuInflater().inflate(R.menu.main, menu);
+	return true;
+  }
+  
   private boolean isEmpty(EditText etText) {
     if (etText.getText().toString().trim().length() > 0) {
       return false;

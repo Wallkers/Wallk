@@ -27,7 +27,7 @@ public class FavoriteArtworkAdapter extends ParseQueryAdapter<Artwork>{
 			public ParseQuery<Artwork> create() {
 				// Here we can configure a ParseQuery to display
 				// only top-rated artworks.
-				ParseQuery query = new ParseQuery("Artwork");
+				ParseQuery<Artwork> query = new ParseQuery<Artwork>("Artwork");
 				query.whereContainedIn("rating", Arrays.asList("5", "4"));
 				query.orderByDescending("rating");
 				return query;

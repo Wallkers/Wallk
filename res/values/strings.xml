@@ -8,14 +8,18 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_artwork_list">Artworks list</string>
     <string name="title_activity_new_artwork">NewArtworkActivity</string>
-    <string name="action_refresh">Refresh</string>
-    <string name="action_favorite">Favorites</string>
-    <string name="action_new">Add an Artwork</string>
-    <string name="action_account">My account</string>
     <string name="menu_title">My Pictures</string>
     <string name="artwork_label">Add an Artwork</string>
     <string name="save_button_text">Save</string>
     <string name="cancel_button_text">Cancel</string>
+    
+    <string name="action_refresh">Refresh</string>
+    <string name="action_favorite">Favorites</string>
+    <string name="action_new">Add an Artwork</string>
+    <string name="action_account">My account</string>
+    <string name="action_camera">Take a picture</string>
+    <string name="action_gallery">View gallery</string>
+    <string name="action_map">View map</string>
 
     <string-array name="ratings_array">
         <item>5</item>
