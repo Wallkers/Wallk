@@ -3,11 +3,13 @@ package com.imac.wallk.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imac.wallk.DispatchActivity;
@@ -31,7 +33,12 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
-
+		
+		//change font
+		TextView titleView = (TextView) findViewById(R.id.login_title_label);
+		Typeface titleFont = Typeface.createFromAsset(getAssets(), "PermanentMarker.ttf");
+		titleView.setTypeface(titleFont);
+		
 		// Set up the login form.
 		usernameView = (EditText) findViewById(R.id.username);
 		passwordView = (EditText) findViewById(R.id.password);
