@@ -48,8 +48,14 @@ public class CameraActivity extends Activity {
 			break;
 		}
 
-		case R.id.action_account: {
+		case R.id.action_login: {
 			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			break;
+		}
+		
+		case R.id.action_signup: {
+			Intent intent = new Intent(this, SignupActivity.class);
 			startActivity(intent);
 			break;
 		}

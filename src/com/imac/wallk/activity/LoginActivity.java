@@ -144,8 +144,14 @@ public class LoginActivity extends Activity {
 			break;
 		}
 
-		case R.id.action_account: {
+		case R.id.action_login: {
 			// Don't open himself
+			break;
+		}
+		
+		case R.id.action_signup: {
+			Intent intent = new Intent(this, SignupActivity.class);
+			startActivity(intent);
 			break;
 		}
 

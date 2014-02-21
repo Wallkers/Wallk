@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import com.imac.wallk.R;
 import com.imac.wallk.activity.LoginActivity;
-import com.imac.wallk.activity.SignUpActivity;
+import com.imac.wallk.activity.SignupActivity;
 
 /**
  * Activity which displays a registration screen to the user.
@@ -33,7 +33,7 @@ public class SignUpOrLogInActivity extends Activity {
     ((Button) findViewById(R.id.signUpButton)).setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
         // Starts an intent for the sign up activity
-        startActivity(new Intent(SignUpOrLogInActivity.this, SignUpActivity.class));
+        startActivity(new Intent(SignUpOrLogInActivity.this, SignupActivity.class));
       }
     });
   }

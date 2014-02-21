@@ -26,8 +26,12 @@
         
         <menu>
             <item
-                android:id="@+id/action_account"
+                android:id="@+id/action_login"
                 android:title="@string/log_in" />
+            
+            <item
+                android:id="@+id/action_signup"
+                android:title="@string/sign_up" />
         </menu>
     </item>
 

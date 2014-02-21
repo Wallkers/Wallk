@@ -1,12 +1,12 @@
 package com.imac.wallk.activity;
 
-import com.imac.wallk.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.imac.wallk.R;
 
 public class MapActivity extends Activity {
 	@Override
@@ -48,8 +48,14 @@ public class MapActivity extends Activity {
 			break;
 		}
 
-		case R.id.action_account: {
+		case R.id.action_login: {
 			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			break;
+		}
+		
+		case R.id.action_signup: {
+			Intent intent = new Intent(this, SignupActivity.class);
 			startActivity(intent);
 			break;
 		}
