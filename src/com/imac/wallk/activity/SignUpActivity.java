@@ -156,7 +156,7 @@ public class SignupActivity extends Activity {
 		}
 
 		case R.id.action_map: {
-			Intent intent = new Intent(this, MapActivity.class);
+			Intent intent = new Intent(this, StreetMapActivity.class);
 			startActivity(intent);
 			break;
 		}

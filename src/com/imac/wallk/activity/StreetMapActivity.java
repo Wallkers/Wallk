@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.imac.wallk.R;
 
-public class MapActivity extends Activity {
+public class StreetMapActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// hide the title in the action bar
