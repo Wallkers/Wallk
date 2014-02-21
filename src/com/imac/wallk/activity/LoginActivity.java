@@ -1,16 +1,16 @@
-package com.imac.wallk;
+package com.imac.wallk.activity;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.imac.wallk.DispatchActivity;
+import com.imac.wallk.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -18,7 +18,6 @@ import com.parse.ParseUser;
 /**
  * Activity which displays a login screen to the user
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LoginActivity extends Activity {
   // UI references.
   private EditText usernameView;

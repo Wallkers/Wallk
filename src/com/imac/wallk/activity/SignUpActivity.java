@@ -1,4 +1,4 @@
-package com.imac.wallk;
+package com.imac.wallk.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.imac.wallk.DispatchActivity;
+import com.imac.wallk.R;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;

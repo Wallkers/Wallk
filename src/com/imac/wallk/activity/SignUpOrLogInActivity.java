@@ -1,4 +1,4 @@
-package com.imac.wallk;
+package com.imac.wallk.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
+import com.imac.wallk.R;
 
 /**
  * Activity which displays a registration screen to the user.
