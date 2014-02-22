@@ -40,7 +40,7 @@ public class WallkApplication extends Application {
 		 */
 		//ParseUser.enableAutomaticUser();
 		//pour l'instant on déco l'user à chaque fois 
-		ParseUser.logOut();
+		//ParseUser.logOut();
 
 		/*
 		 * For more information on app security and Parse ACL:
