@@ -26,13 +26,18 @@
         
         <menu>
             <item
-                android:id="@+id/action_login"
-                android:title="@string/log_in" />
+                android:id="@+id/action_myAccount"
+                android:title="@string/my_account" />
             
             <item
-                android:id="@+id/action_signup"
-                android:title="@string/sign_up" />
+                android:id="@+id/action_myGallery"
+                android:title="@string/my_gallery" />
+            
+            <item
+                android:id="@+id/action_logOut"
+                android:title="@string/log_out" />
         </menu>
     </item>
 
 </menu>
+

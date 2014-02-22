@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.imac.wallk.activity.GalleryActivity;
 import com.parse.ParseUser;
 
 /**
@@ -21,7 +22,7 @@ public class DispatchActivity extends Activity {
     // Check if there is current user info
     if (ParseUser.getCurrentUser() != null) {
       // Start an intent for the logged in activity
-      startActivity(new Intent(this, ArtworkListActivity.class));
+      startActivity(new Intent(this, GalleryActivity.class));
     } else {
       // Start and intent for the logged out activity
       startActivity(new Intent(this, SignUpOrLogInActivity.class));

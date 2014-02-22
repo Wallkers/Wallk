@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.imac.wallk.R;
+import com.imac.wallk.activity.LoginActivity;
+import com.imac.wallk.activity.SignUpActivity;
+
 /**
  * Activity which displays a registration screen to the user.
  */
