@@ -1,7 +1,6 @@
 package com.imac.wallk.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imac.wallk.R;
-import com.imac.wallk.activity.GalleryActivity;
+import com.imac.wallk.activity.WallkActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -75,7 +74,7 @@ public class LoginFragment extends Fragment {
 
 						// Set up a progress dialog
 						final ProgressDialog dlg = new ProgressDialog(
-								getActivity().getApplicationContext());
+								getActivity());
 						dlg.setTitle("Please wait.");
 						dlg.setMessage("Logging in.  Please wait.");
 						dlg.show();
@@ -96,15 +95,9 @@ public class LoginFragment extends Fragment {
 													e.getMessage(),
 													Toast.LENGTH_LONG).show();
 										} else {
-											// Start an intent for the dispatch
-											// activity
-											Intent intent = new Intent(
-													getActivity()
-															.getApplicationContext(),
-													GalleryActivity.class);
-											intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-													| Intent.FLAG_ACTIVITY_NEW_TASK);
-											startActivity(intent);
+											// change the fragment
+											WallkActivity parentActivity = (WallkActivity) getActivity();
+											parentActivity.showFragment(parentActivity.getGalleryFrag());
 										}
 									}
 								});

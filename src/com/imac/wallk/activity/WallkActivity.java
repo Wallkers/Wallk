@@ -13,17 +13,18 @@ import com.imac.wallk.fragment.AccountFragment;
 import com.imac.wallk.fragment.CameraFragment;
 import com.imac.wallk.fragment.GalleryFragment;
 import com.imac.wallk.fragment.LoginFragment;
+import com.imac.wallk.fragment.SignupFragment;
 import com.parse.ParseUser;
 
 public class WallkActivity extends FragmentActivity {
 	public GalleryFragment galleryFrag = null;
-	public CameraFragment cameraFrag = null;
 	public LoginFragment loginFrag = null;
+	public SignupFragment signupFrag = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// hide the title in the action bar
-		getActionBar().setDisplayShowTitleEnabled(false);
+		//getActionBar().setDisplayShowTitleEnabled(false);
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
@@ -71,7 +72,7 @@ public class WallkActivity extends FragmentActivity {
 		}
 
 		case R.id.action_signup: {
-			// TODO : Load signup fragment
+			showFragment(this.signupFrag);
 			break;
 		}
 
@@ -88,7 +89,7 @@ public class WallkActivity extends FragmentActivity {
 
 		case R.id.action_logOut: {
 			ParseUser.logOut();
-			// TODO : Reload current fragment
+			showFragment(this.galleryFrag);
 			break;
 		}
 
@@ -99,11 +100,11 @@ public class WallkActivity extends FragmentActivity {
 
 	private void setupFragments() {
 		this.galleryFrag = new GalleryFragment();
-		this.cameraFrag = new CameraFragment();
 		this.loginFrag = new LoginFragment();
+		this.signupFrag = new SignupFragment();
 	}
 
-	private void showFragment(Fragment fragment) {
+	public void showFragment(Fragment fragment) {
 		if (fragment == null)
 			return;
 
@@ -113,5 +114,18 @@ public class WallkActivity extends FragmentActivity {
 		ft.replace(R.id.fragment_container, fragment);
 
 		ft.commit();
+	}
+	
+	/* GETTERS */
+	public GalleryFragment getGalleryFrag() {
+		return galleryFrag;
+	}
+
+	public LoginFragment getLoginFrag() {
+		return loginFrag;
+	}
+
+	public SignupFragment getSignupFrag() {
+		return signupFrag;
 	}
 }
