@@ -1,49 +1,46 @@
-package com.imac.wallk.activity;
+package com.imac.wallk.fragment;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imac.wallk.R;
+import com.imac.wallk.activity.GalleryActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-/**
- * Activity which displays a login screen to the user
- */
-public class LoginActivity extends Activity {
+public class LoginFragment extends Fragment {
+
 	// UI references.
 	private EditText usernameView;
 	private EditText passwordView;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// hide the title in the action bar
-        getActionBar().setDisplayShowTitleEnabled(false);
-		super.onCreate(savedInstanceState);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.activity_login, container, false);
 
-		setContentView(R.layout.activity_login);
-		
-		//change font
-		TextView titleView = (TextView) findViewById(R.id.login_title_label);
-		Typeface titleFont = Typeface.createFromAsset(getAssets(), "PermanentMarker.ttf");
+		// change font
+		TextView titleView = (TextView) v.findViewById(R.id.login_title_label);
+		Typeface titleFont = Typeface.createFromAsset(
+				getActivity().getAssets(), "PermanentMarker.ttf");
 		titleView.setTypeface(titleFont);
-		
+
 		// Set up the login form.
-		usernameView = (EditText) findViewById(R.id.username);
-		passwordView = (EditText) findViewById(R.id.password);
+		usernameView = (EditText) v.findViewById(R.id.username);
+		passwordView = (EditText) v.findViewById(R.id.password);
 
 		// Set up the submit button click handler
-		findViewById(R.id.action_button).setOnClickListener(
+		v.findViewById(R.id.action_button).setOnClickListener(
 				new View.OnClickListener() {
 					public void onClick(View view) {
 						// Validate the log in data
@@ -69,7 +66,8 @@ public class LoginActivity extends Activity {
 
 						// If there is a validation error, display the error
 						if (validationError) {
-							Toast.makeText(LoginActivity.this,
+							Toast.makeText(
+									getActivity().getApplicationContext(),
 									validationErrorMessage.toString(),
 									Toast.LENGTH_LONG).show();
 							return;
@@ -77,7 +75,7 @@ public class LoginActivity extends Activity {
 
 						// Set up a progress dialog
 						final ProgressDialog dlg = new ProgressDialog(
-								LoginActivity.this);
+								getActivity().getApplicationContext());
 						dlg.setTitle("Please wait.");
 						dlg.setMessage("Logging in.  Please wait.");
 						dlg.show();
@@ -92,14 +90,17 @@ public class LoginActivity extends Activity {
 										dlg.dismiss();
 										if (e != null) {
 											// Show the error message
-											Toast.makeText(LoginActivity.this,
+											Toast.makeText(
+													getActivity()
+															.getApplicationContext(),
 													e.getMessage(),
 													Toast.LENGTH_LONG).show();
 										} else {
 											// Start an intent for the dispatch
 											// activity
 											Intent intent = new Intent(
-													LoginActivity.this,
+													getActivity()
+															.getApplicationContext(),
 													GalleryActivity.class);
 											intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
 													| Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -109,6 +110,8 @@ public class LoginActivity extends Activity {
 								});
 					}
 				});
+
+		return v;
 	}
 
 	private boolean isEmpty(EditText etText) {
@@ -117,52 +120,5 @@ public class LoginActivity extends Activity {
 		} else {
 			return true;
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.unauthenticated_menu, menu);
-		return true;
-	}
-
-	/*
-	 * Handler function for ActionBar's buttons click event
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		
-		case R.id.action_camera: {
-			Intent intent = new Intent(this, CameraActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		case R.id.action_map: {
-			Intent intent = new Intent(this, StreetMapActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		case R.id.action_gallery: {
-			Intent intent = new Intent(this, GalleryActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		case R.id.action_login: {
-			// Don't open himself
-			break;
-		}
-		
-		case R.id.action_signup: {
-			Intent intent = new Intent(this, SignUpActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		}
-		
-		return super.onOptionsItemSelected(item);
 	}
 }
