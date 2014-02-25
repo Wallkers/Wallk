@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.imac.wallk.R;
+import com.imac.wallk.fragment.AccountFragment;
 import com.imac.wallk.fragment.CameraFragment;
 import com.imac.wallk.fragment.GalleryFragment;
 import com.imac.wallk.fragment.LoginFragment;
@@ -76,7 +77,7 @@ public class WallkActivity extends FragmentActivity {
 
 		// authenticated user
 		case R.id.action_myAccount: {
-			// TODO : Load profil fragment
+			showFragment(new AccountFragment());
 			break;
 		}
 

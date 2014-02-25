@@ -5,6 +5,7 @@ import android.app.Application;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 public class WallkApplication extends Application {
 
@@ -37,7 +38,7 @@ public class WallkApplication extends Application {
 		 * Learn more about the ParseUser class:
 		 * https://www.parse.com/docs/android_guide#users
 		 */
-		//ParseUser.enableAutomaticUser();
+		ParseUser.enableAutomaticUser();
 		//pour l'instant on déco l'user à chaque fois 
 		//ParseUser.logOut();
 
