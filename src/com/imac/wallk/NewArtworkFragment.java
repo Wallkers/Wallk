@@ -133,7 +133,7 @@ public class NewArtworkFragment extends Fragment implements LocationListener,
 				artwork.setTitle(artworkName.getText().toString());
 
 				// Associate the artwork with the current user
-				artwork.setAuthor(ParseUser.getCurrentUser());
+				artwork.setPictureAuthor(ParseUser.getCurrentUser());
 
 				// Add the rating
 				artwork.setRating(artworkRating.getSelectedItem().toString());
