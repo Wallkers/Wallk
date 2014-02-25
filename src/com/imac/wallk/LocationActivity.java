@@ -1,25 +1,22 @@
 package com.imac.wallk;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -28,9 +25,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 /**
  * This the app's main Activity. It provides buttons for requesting the various features of the
  * app, displays the current location, the current address, and the status of the location client
@@ -81,14 +81,14 @@ public class LocationActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
 
-        // Get handles to the UI view objects
-        mLatLng = (TextView) findViewById(R.id.lat_lng);
-        mAddress = (TextView) findViewById(R.id.address);
-        mActivityIndicator = (ProgressBar) findViewById(R.id.address_progress);
-        mConnectionState = (TextView) findViewById(R.id.text_connection_state);
-        mConnectionStatus = (TextView) findViewById(R.id.text_connection_status);
+//        // Get handles to the UI view objects
+//        mLatLng = (TextView) findViewById(R.id.lat_lng);
+//        mAddress = (TextView) findViewById(R.id.address);
+//        mActivityIndicator = (ProgressBar) findViewById(R.id.address_progress);
+//        mConnectionState = (TextView) findViewById(R.id.text_connection_state);
+//        mConnectionStatus = (TextView) findViewById(R.id.text_connection_status);
 
         // Create a new global location parameters object
         mLocationRequest = LocationRequest.create();
@@ -267,35 +267,69 @@ public class LocationActivity extends FragmentActivity implements
         }
     }
 
-    /**
-     * Invoked by the "Get Location" button.
-     *
-     * Calls getLastLocation() to get the current location
-     *
-     * @param v The view object associated with this method, in this case a Button.
-     */
-    public void getLocation(View v) {
-
+//    /**
+//     * Invoked by the "Get Location" button.
+//     *
+//     * Calls getLastLocation() to get the current location
+//     *
+//     * @param v The view object associated with this method, in this case a Button.
+//     */
+//    public void getLocation(View v) {
+//
+//        // If Google Play Services is available
+//        if (servicesConnected()) {
+//
+//            // Get the current location
+//            Location currentLocation = mLocationClient.getLastLocation();
+//
+//            // Display the current location in the UI
+//            mLatLng.setText(LocationUtils.getLatLng(this, currentLocation));
+//        }
+//    }
+    
+    public Location getLocation() {
+    	Location currentLocation = null;
         // If Google Play Services is available
         if (servicesConnected()) {
 
             // Get the current location
-            Location currentLocation = mLocationClient.getLastLocation();
-
-            // Display the current location in the UI
-            mLatLng.setText(LocationUtils.getLatLng(this, currentLocation));
+             currentLocation = mLocationClient.getLastLocation();
         }
+		return currentLocation;
     }
 
-    /**
-     * Invoked by the "Get Address" button.
-     * Get the address of the current location, using reverse geocoding. This only works if
-     * a geocoding service is available.
-     *
-     * @param v The view object associated with this method, in this case a Button.
-     */
-    // For Eclipse with ADT, suppress warnings about Geocoder.isPresent()
-    @SuppressLint("NewApi")
+//    /**
+//     * Invoked by the "Get Address" button.
+//     * Get the address of the current location, using reverse geocoding. This only works if
+//     * a geocoding service is available.
+//     *
+//     * @param v The view object associated with this method, in this case a Button.
+//     */
+//    // For Eclipse with ADT, suppress warnings about Geocoder.isPresent()
+//    @SuppressLint("NewApi")
+//    public void getAddress(View v) {
+//
+//        // In Gingerbread and later, use Geocoder.isPresent() to see if a geocoder is available.
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && !Geocoder.isPresent()) {
+//            // No geocoder is present. Issue an error message
+//            Toast.makeText(this, R.string.no_geocoder_available, Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//
+//        if (servicesConnected()) {
+//
+//            // Get the current location
+//            Location currentLocation = mLocationClient.getLastLocation();
+//
+//            // Turn the indefinite activity indicator on
+//            mActivityIndicator.setVisibility(View.VISIBLE);
+//
+//            // Start the background task
+//            (new LocationActivity.GetAddressTask(this)).execute(currentLocation);
+//        }
+//    }
+
+    
     public void getAddress(View v) {
 
         // In Gingerbread and later, use Geocoder.isPresent() to see if a geocoder is available.
@@ -317,7 +351,6 @@ public class LocationActivity extends FragmentActivity implements
             (new LocationActivity.GetAddressTask(this)).execute(currentLocation);
         }
     }
-
     /**
      * Invoked by the "Start Updates" button
      * Sends a request to start location updates
