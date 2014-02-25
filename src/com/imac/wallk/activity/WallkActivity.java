@@ -22,7 +22,7 @@ public class WallkActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// hide the title in the action bar
-		getActionBar().setDisplayShowTitleEnabled(false);
+		//getActionBar().setDisplayShowTitleEnabled(false);
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
@@ -102,7 +102,7 @@ public class WallkActivity extends FragmentActivity {
 		this.loginFrag = new LoginFragment();
 	}
 
-	private void showFragment(Fragment fragment) {
+	public void showFragment(Fragment fragment) {
 		if (fragment == null)
 			return;
 
@@ -112,5 +112,18 @@ public class WallkActivity extends FragmentActivity {
 		ft.replace(R.id.fragment_container, fragment);
 
 		ft.commit();
+	}
+	
+	/* GETTERS */
+	public GalleryFragment getGalleryFrag() {
+		return galleryFrag;
+	}
+
+	public CameraFragment getCameraFrag() {
+		return cameraFrag;
+	}
+
+	public LoginFragment getLoginFrag() {
+		return loginFrag;
 	}
 }
