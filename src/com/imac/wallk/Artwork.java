@@ -1,5 +1,7 @@
 package com.imac.wallk;
 
+import java.util.Date;
+
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
@@ -12,6 +14,7 @@ public class Artwork extends ParseObject{
 	public Artwork() {
     }
  
+	//title
     public String getTitle() {
         return getString("title");
     }
@@ -20,14 +23,16 @@ public class Artwork extends ParseObject{
         put("title", title);
     }
  
+    //author
     public ParseUser getPictureAuthor() {
         return getParseUser("author");
     }
  
-    public void setAuthor(ParseUser user) {
+    public void setPictureAuthor(ParseUser user) {
         put("author", user);
     }
  
+    //rating
     public String getRating() {
         return getString("rating");
     }
@@ -36,6 +41,7 @@ public class Artwork extends ParseObject{
         put("rating", rating);
     }
  
+    //photo
     public ParseFile getPhotoFile() {
         return getParseFile("photo");
     }
@@ -44,12 +50,22 @@ public class Artwork extends ParseObject{
         put("photo", file);
     }
 	
+    //location
     public ParseGeoPoint getLocation(){
     	return getParseGeoPoint("location");
     }
 	
     public void setLocation(ParseGeoPoint geoPoint) {
         put("location", geoPoint);
+    }
+    
+    //date
+    public Date getDate(){
+    	return getDate("date");
+    }
+	
+    public void setLocation(Date date) {
+        put("date", date);
     }
 	
 }

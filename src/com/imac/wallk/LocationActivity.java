@@ -81,7 +81,8 @@ public class LocationActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_location_temp);
+
 
 //        // Get handles to the UI view objects
 //        mLatLng = (TextView) findViewById(R.id.lat_lng);

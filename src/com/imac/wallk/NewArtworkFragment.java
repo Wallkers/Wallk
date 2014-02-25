@@ -1,15 +1,12 @@
 package com.imac.wallk;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +27,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.imac.wallk.fragment.CameraFragment;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -133,7 +131,7 @@ public class NewArtworkFragment extends Fragment implements LocationListener,
 				artwork.setTitle(artworkName.getText().toString());
 
 				// Associate the artwork with the current user
-				artwork.setAuthor(ParseUser.getCurrentUser());
+				artwork.setPictureAuthor(ParseUser.getCurrentUser());
 
 				// Add the rating
 				artwork.setRating(artworkRating.getSelectedItem().toString());

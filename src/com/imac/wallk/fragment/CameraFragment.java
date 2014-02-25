@@ -1,15 +1,15 @@
-package com.imac.wallk;
+package com.imac.wallk.fragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.imac.wallk.NewArtworkActivity;
+import com.imac.wallk.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
