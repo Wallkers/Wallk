@@ -1,14 +1,20 @@
 package com.imac.wallk.activity;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.imac.wallk.R;
+import com.imac.wallk.fragment.GalleryFragment;
 import com.parse.ParseUser;
 
 public class WallkActivity extends Activity {
+	public GalleryFragment galleryFrag = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// hide the title in the action bar
@@ -16,6 +22,9 @@ public class WallkActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_main);
+		
+		setupFragments();
+		showFragment(this.galleryFrag);
 	}
 	
 	@Override
@@ -46,7 +55,7 @@ public class WallkActivity extends Activity {
 			}
 	
 			case R.id.action_gallery: {
-				//TODO : Load gallery fragment 
+				showFragment(this.galleryFrag);
 				break;
 			}
 	
@@ -68,7 +77,7 @@ public class WallkActivity extends Activity {
 			}
 			
 			case R.id.action_myGallery: {
-				//TODO : Load gallery fragment with owner filter 
+				showFragment(this.galleryFrag);
 				break;
 			}
 			
@@ -81,5 +90,21 @@ public class WallkActivity extends Activity {
 		}
 		
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private void setupFragments() {
+		this.galleryFrag = new GalleryFragment();
+	}
+	
+	private void showFragment(Fragment fragment) {
+		if (fragment == null)
+			return;
+
+		final FragmentManager fm = getFragmentManager();
+		final FragmentTransaction ft = fm.beginTransaction();
+
+		ft.replace(R.id.fragment_container, fragment);
+
+		ft.commit();
 	}
 }
