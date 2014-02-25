@@ -36,6 +36,17 @@
     		android:name="com.google.android.maps.v2.API_KEY"
     		android:value="AIzaSyCpg2TU6vJJRfHwWpQ7yQ63Q8BxY-TPsKM"/>
        	
+        <activity
+            android:name="com.imac.wallk.activity.WallkActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+        </activity>
         
         <activity
             android:name=".ArtworkListActivity"
@@ -50,11 +61,6 @@
         <activity
             android:name="com.imac.wallk.activity.GalleryActivity"
             android:label="@string/app_name" >
-            
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 		
         <activity
@@ -91,6 +97,8 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
+        
+
        
     </application>
 

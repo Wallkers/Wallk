@@ -49,7 +49,7 @@ public class WallkActivity extends FragmentActivity {
 		switch (item.getItemId()) {
 
 		case R.id.action_camera: {
-			showFragment(this.cameraFrag);
+			showFragment(new CameraFragment());
 			break;
 		}
 
