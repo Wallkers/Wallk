@@ -9,31 +9,42 @@ import android.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.imac.wallk.LocationActivity;
 import com.imac.wallk.R;
 import com.parse.ParseUser;
 
 public class StreetMapActivity extends Activity {
 
+	
 	    @Override
 	    protected void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.activity_map);
 
+	        //Temporary ! 
+//	        Intent intent = new Intent(this, LocationActivity.class);
+//	        startActivity(intent);
+	        
 	        // Get a handle to the Map Fragment
 	        GoogleMap map = ((MapFragment) getFragmentManager()
 	                .findFragmentById(R.id.map)).getMap();
 
-	        LatLng sydney = new LatLng(-33.867, 151.206);
-
 	        map.setMyLocationEnabled(true);
-	        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+	        map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+	                new LatLng(41.889, -87.622), 16));
+	        
 
+	        
+	        // You can customize the marker image using images bundled with
+	        // your app, or dynamically generated bitmaps. 
 	        map.addMarker(new MarkerOptions()
-	                .title("Sydney")
-	                .snippet("The most populous city in Australia.")
-	                .position(sydney));
+	                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place))
+	                .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+	                .position(new LatLng(41.889, -87.622)));
+
 	    }
 
 
