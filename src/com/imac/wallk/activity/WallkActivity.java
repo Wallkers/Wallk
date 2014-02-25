@@ -11,11 +11,13 @@ import android.view.MenuItem;
 import com.imac.wallk.R;
 import com.imac.wallk.fragment.CameraFragment;
 import com.imac.wallk.fragment.GalleryFragment;
+import com.imac.wallk.fragment.LoginFragment;
 import com.parse.ParseUser;
 
 public class WallkActivity extends FragmentActivity {
 	public GalleryFragment galleryFrag = null;
 	public CameraFragment cameraFrag = null;
+	public LoginFragment loginFrag = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,7 @@ public class WallkActivity extends FragmentActivity {
 
 		// unauthenticated user
 		case R.id.action_login: {
-			// TODO : Load login fragment
+			showFragment(this.loginFrag);
 			break;
 		}
 
@@ -97,6 +99,7 @@ public class WallkActivity extends FragmentActivity {
 	private void setupFragments() {
 		this.galleryFrag = new GalleryFragment();
 		this.cameraFrag = new CameraFragment();
+		this.loginFrag = new LoginFragment();
 	}
 
 	private void showFragment(Fragment fragment) {
