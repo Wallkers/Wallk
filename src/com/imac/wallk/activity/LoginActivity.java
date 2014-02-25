@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.imac.wallk.DispatchActivity;
 import com.imac.wallk.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;

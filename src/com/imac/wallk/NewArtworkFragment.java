@@ -1,15 +1,12 @@
 package com.imac.wallk;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
