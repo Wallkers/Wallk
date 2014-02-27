@@ -3,7 +3,7 @@
 
     <string name="app_name">Wallk</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">Hello World</string>
 
     <string name="menu_settings">Settings</string>
     <string name="title_activity_artwork_list">Artworks list</string>
@@ -117,5 +117,16 @@
     <string name="unknown_activity_request_code">
         Received an unknown activity request code %1$d in onActivityResult.
     </string>
+    
+    <!-- ACCOUNT -->
+    <string name="usernameTitle">Username :</string>
+    <string name="passwordTitle">Password :</string>
+    <string name="fakePassword">********</string>
+    <string name="change">Change</string>
+    
+    <!-- In dialog popup for changing username or password -->
+    <string name="formerTitle">Current:</string>
+    <string name="newTitle">New:</string>
+    
     
 </resources>
