@@ -6,6 +6,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 @ParseClassName("Artwork")
@@ -67,5 +68,10 @@ public class Artwork extends ParseObject{
     public void setLocation(Date date) {
         put("date", date);
     }
+    
+    public static ParseQuery<Artwork> getQuery() {
+        return ParseQuery.getQuery(Artwork.class);
+      }
+
 	
 }
