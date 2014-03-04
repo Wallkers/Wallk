@@ -89,6 +89,7 @@ public class WallkActivity extends FragmentActivity {
 
 		case R.id.action_logOut: {
 			ParseUser.logOut();
+			invalidateOptionsMenu();//recreate the menu (have to do it because of logout)
 			showFragment(this.galleryFrag);
 			break;
 		}
