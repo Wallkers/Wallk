@@ -124,14 +124,13 @@
     <string name="usernameTitle">Username :</string>
     <string name="formerUsername">Former Username :</string>
     <string name="error_same_username">enter a new name</string>
+    <string name="mail_title">Your mail :</string>
     <string name="password_mail_ok">The mail was successfully sent</string>
-   
-    
-    
+ 
     <string name="passwordTitle">Password :</string>
     <string name="fakePassword">********</string>
     <string name="change">Change</string>
-    <string name="changePasswordExplanation">Press OK will send you an email which will allow you to reset your password</string>
+    <string name="changePasswordExplanation">Press OK will send you an email allowing you to choose a new password</string>
     
     <!-- In dialog popup for changing username or password -->
     <string name="formerTitle">Current:</string>
