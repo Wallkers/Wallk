@@ -1,10 +1,14 @@
-package com.imac.wallk;
+package com.imac.wallk.adapter;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.imac.wallk.Artwork;
+import com.imac.wallk.R;
+import com.imac.wallk.R.id;
+import com.imac.wallk.R.layout;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -23,7 +27,7 @@ public class UserArtworkAdapter extends ParseQueryAdapter<Artwork>{
 		super(context, new ParseQueryAdapter.QueryFactory<Artwork>() {
 			public ParseQuery<Artwork> create() {
 				// Here we can configure a ParseQuery to display
-				// only top-rated artworks.
+				// only user artworks.
 				ParseQuery<Artwork> query = new ParseQuery<Artwork>("Artwork");
 				query.whereEqualTo("author", ParseUser.getCurrentUser());
 				query.orderByAscending("date");

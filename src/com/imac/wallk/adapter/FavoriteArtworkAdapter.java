@@ -1,4 +1,4 @@
-package com.imac.wallk;
+package com.imac.wallk.adapter;
 
 import java.util.Arrays;
 
@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.imac.wallk.Artwork;
+import com.imac.wallk.R;
+import com.imac.wallk.R.id;
+import com.imac.wallk.R.layout;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;

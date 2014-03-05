@@ -84,6 +84,7 @@ public class WallkActivity extends FragmentActivity {
 
 		case R.id.action_myGallery: {
 			showFragment(this.galleryFrag);
+			this.galleryFrag.showUserArtworks();
 			break;
 		}
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.imac.wallk.adapter.FavoriteArtworkAdapter;
 import com.parse.ParseQueryAdapter;
 
 public class ArtworkListActivity extends ListActivity{
