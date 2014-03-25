@@ -42,7 +42,9 @@ public class GalleryFragment extends ListFragment {
 		mainAdapter.setImageKey("photo");
 
 		// Subclass of ParseQueryAdapter
+		//adapters allow to sort pictures
 		favoritesAdapter = new FavoriteArtworkAdapter(this.getActivity());
+		//sort pictures by user
 		userAdapter = new UserArtworkAdapter(this.getActivity());
 		
 		mainAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Artwork>() {
