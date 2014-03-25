@@ -1,4 +1,4 @@
-package com.imac.wallk.activity;
+package com.imac.wallk.fragment;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -6,15 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -40,23 +39,20 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
-import com.parse.ParseUser;
 
-
-public class StreetMapActivity extends FragmentActivity implements LocationListener,
+public class MapFragment extends Fragment implements LocationListener,
 GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener {
-
 	/*
-	 * Define a request code to send to Google Play services This code is returned in
-	 * Activity.onActivityResult
-	 */
+	* Define a request code to send to Google Play services This code is returned in
+	* Activity.onActivityResult
+	*/
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
 	private float m_searchDistance = 250;
 	/*
-	 * Constants for location update parameters
-	 */
+	* Constants for location update parameters
+	*/
 	// Milliseconds per second
 	private static final int MILLISECONDS_PER_SECOND = 1000;
 
@@ -68,15 +64,15 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 
 	// Update interval in milliseconds
 	private static final long UPDATE_INTERVAL_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
-			* UPDATE_INTERVAL_IN_SECONDS;
+	  * UPDATE_INTERVAL_IN_SECONDS;
 
 	// A fast ceiling of update intervals, used when the app is visible
 	private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
-			* FAST_CEILING_IN_SECONDS;
+	  * FAST_CEILING_IN_SECONDS;
 
 	/*
-	 * Constants for handling location results
-	 */
+	* Constants for handling location results
+	*/
 	// Conversion from feet to meters
 	private static final float METERS_PER_FEET = 0.3048f;
 
@@ -96,8 +92,8 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	private static final int MAX_POST_SEARCH_DISTANCE = 100;
 
 	/*
-	 * Other class member variables
-	 */
+	* Other class member variables
+	*/
 	// Map fragment
 	private SupportMapFragment map;
 
@@ -124,62 +120,63 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 
 	// Adapter for the Parse query
 	private ParseQueryAdapter<Artwork> posts;
-
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.activity_map, container, false);
+		
 		radius = m_searchDistance;
 		lastRadius = radius;
-		setContentView(R.layout.activity_map);
-
+		
 		// Create a new global location parameters object
-		locationRequest = LocationRequest.create();
+				locationRequest = LocationRequest.create();
 
-		// Set the update interval
-		locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+				// Set the update interval
+				locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
 
-		// Use high accuracy
-		locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+				// Use high accuracy
+				locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-		// Set the interval ceiling to one minute
-		locationRequest.setFastestInterval(FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+				// Set the interval ceiling to one minute
+				locationRequest.setFastestInterval(FAST_INTERVAL_CEILING_IN_MILLISECONDS);
 
-		// Create a new location client, using the enclosing class to handle callbacks.
-		locationClient = new LocationClient(this, this, this);
+				// Create a new location client, using the enclosing class to handle callbacks.
+				locationClient = new LocationClient(this.getActivity(), this, this);
 
-		//// Set up a customized query
-		//ParseQueryAdapter.QueryFactory<Artwork> factory =
-		//    new ParseQueryAdapter.QueryFactory<Artwork>() {
-		//      public ParseQuery<Artwork> create() {
-		//        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
-		//        ParseQuery<Artwork> query = Artwork.getQuery();
-		//        query.include("user");
-		//        query.orderByDescending("createdAt");
-		//        query.whereWithinKilometers("location", geoPointFromLocation(myLoc), radius
-		//            * METERS_PER_FEET / METERS_PER_KILOMETER);
-		//        query.setLimit(MAX_POST_SEARCH_RESULTS);
-		//        return query;
-		//      }
-		//    };
-
-
-		// Set up the map fragment
-		map = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
-		// Enable the current location "blue dot"
-		map.getMap().setMyLocationEnabled(true);
-		// Set up the camera change handler
-		map.getMap().setOnCameraChangeListener(new OnCameraChangeListener() {
-			public void onCameraChange(CameraPosition position) {
-				// When the camera changes, update the query
-				doMapQuery();
-			}
-		});
+				//// Set up a customized query
+				//ParseQueryAdapter.QueryFactory<Artwork> factory =
+				//    new ParseQueryAdapter.QueryFactory<Artwork>() {
+				//      public ParseQuery<Artwork> create() {
+				//        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
+				//        ParseQuery<Artwork> query = Artwork.getQuery();
+				//        query.include("user");
+				//        query.orderByDescending("createdAt");
+				//        query.whereWithinKilometers("location", geoPointFromLocation(myLoc), radius
+				//            * METERS_PER_FEET / METERS_PER_KILOMETER);
+				//        query.setLimit(MAX_POST_SEARCH_RESULTS);
+				//        return query;
+				//      }
+				//    };
 
 
+				// Set up the map fragment
+				map = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map);
+				// Enable the current location "blue dot"
+				map.getMap().setMyLocationEnabled(true);
+				// Set up the camera change handler
+				map.getMap().setOnCameraChangeListener(new OnCameraChangeListener() {
+					public void onCameraChange(CameraPosition position) {
+						// When the camera changes, update the query
+						doMapQuery();
+					}
+				});
+		
+		return v;
 	}
-
+	
 	/*
-	 * Called when the Activity is no longer visible at all. Stop updates and disconnect.
+	 * Called when the Fragment is no longer visible at all. Stop updates and disconnect.
 	 */
 	@Override
 	public void onStop() {
@@ -195,7 +192,7 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	}
 
 	/*
-	 * Called when the Activity is restarted, even before it becomes visible.
+	 * Called when the Fragment is restarted, even before it becomes visible.
 	 */
 	@Override
 	public void onStart() {
@@ -206,10 +203,10 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	}
 
 	/*
-	 * Called when the Activity is resumed. Updates the view.
+	 * Called when the Fragment is resumed. Updates the view.
 	 */
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 
 		// Get the latest search distance preference
@@ -230,42 +227,32 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 		// Query for the latest data to update the views.
 		doMapQuery();
 	}
-
+	
 	/*
-	 * Handle results returned to this Activity by other Activities started with
-	 * startActivityForResult(). In particular, the method onConnectionFailed() in
-	 * LocationUpdateRemover and LocationUpdateRequester may call startResolutionForResult() to start
-	 * an Activity that handles Google Play services problems. The result of this call returns here,
-	 * to onActivityResult.
+	 * Called by Location Services if the attempt to Location Services fails.
 	 */
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		// Choose what to do based on the request code
-		switch (requestCode) {
+	public void onConnectionFailed(ConnectionResult connectionResult) {
+		// Google Play services can resolve some errors it detects. If the error has a resolution, try
+		// sending an Intent to start a Google Play services activity that can resolve error.
+		if (connectionResult.hasResolution()) {
+			try {
 
-		// If the request code matches the code sent in onConnectionFailed
-		case CONNECTION_FAILURE_RESOLUTION_REQUEST:
+				// Start an Activity that tries to resolve the error
+				connectionResult.startResolutionForResult(this.getActivity(), CONNECTION_FAILURE_RESOLUTION_REQUEST);
 
-			switch (resultCode) {
-			// If Google Play services resolved the problem
-			case Activity.RESULT_OK:
-				System.out.println("Connected to Google Play services");
+			} catch (IntentSender.SendIntentException e) {
 
-				break;
-
-				// If any other result was returned by Google Play services
-			default:
-				System.out.println("Could not connect to Google Play services");
-				break;
+				// Thrown if Google Play services canceled the original PendingIntent
+				System.out.println("An error occurred when connecting to location services.");
 			}
+		} else {
 
-			// If any other request code was received
-		default:
-			System.out.println("Unknown request code received for the activity");
-			break;
+			// If no resolution is available, display a dialog to the user with the error.
+			System.out.println(connectionResult);
 		}
 	}
-
+	
 	/*
 	 * Verify that Google Play services is available before making a request.
 	 * 
@@ -273,7 +260,7 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	 */
 	private boolean servicesConnected() {
 		// Check that Google Play services is available
-		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getActivity());
 
 		// If Google Play services is available
 		if (ConnectionResult.SUCCESS == resultCode) {
@@ -297,6 +284,7 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	 * Called by Location Services when the request to connect the client finishes successfully. At
 	 * this point, you can request the current location or start periodic updates
 	 */
+	@Override
 	public void onConnected(Bundle bundle) {
 		System.out.println("Connected to location services");
 		currentLocation = getLocation();
@@ -306,37 +294,15 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	/*
 	 * Called by Location Services if the connection to the location client drops because of an error.
 	 */
+	@Override
 	public void onDisconnected() {
 		System.out.println("Disconnected from location services");
 	}
 
 	/*
-	 * Called by Location Services if the attempt to Location Services fails.
-	 */
-	public void onConnectionFailed(ConnectionResult connectionResult) {
-		// Google Play services can resolve some errors it detects. If the error has a resolution, try
-		// sending an Intent to start a Google Play services activity that can resolve error.
-		if (connectionResult.hasResolution()) {
-			try {
-
-				// Start an Activity that tries to resolve the error
-				connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-
-			} catch (IntentSender.SendIntentException e) {
-
-				// Thrown if Google Play services canceled the original PendingIntent
-				System.out.println("An error occurred when connecting to location services.");
-			}
-		} else {
-
-			// If no resolution is available, display a dialog to the user with the error.
-			System.out.println(connectionResult);
-		}
-	}
-
-	/*
 	 * Report location updates to the UI.
 	 */
+	@Override
 	public void onLocationChanged(Location location) {
 		currentLocation = location;
 		if (lastLocation != null
@@ -356,7 +322,7 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 		updateCircle(myLatLng);
 		doMapQuery();
 	}
-
+	
 	/*
 	 * In response to a request to start updates, send a request to Location Services
 	 */
@@ -600,77 +566,4 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 
 		return builder.build();
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if(ParseUser.getCurrentUser() != null){
-			getMenuInflater().inflate(R.menu.authenticated_menu, menu);
-		}else{
-			getMenuInflater().inflate(R.menu.unauthenticated_menu, menu);
-		}
-		return true;
-	}
-
-	/*
-	 * Handler function for ActionBar's buttons click event
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-
-		case R.id.action_camera: {
-			Intent intent = new Intent(this, CameraActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		case R.id.action_map: {
-			//Don't open himself
-			break;
-		}
-
-		case R.id.action_gallery: {
-			Intent intent = new Intent(this, GalleryActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		//unauthenticated user
-		case R.id.action_login: {
-			Intent intent = new Intent(this, LoginActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		case R.id.action_signup: {
-			Intent intent = new Intent(this, SignUpActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		//authenticated user
-		case R.id.action_myAccount: {
-			Intent intent = new Intent(this, GalleryActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		case R.id.action_myGallery: {
-			Intent intent = new Intent(this, GalleryActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		case R.id.action_logOut: {
-			ParseUser.logOut();
-			Intent intent = new Intent(this, GalleryActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
-
 }
