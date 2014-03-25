@@ -1,10 +1,10 @@
 package com.imac.wallk.activity;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,6 +13,7 @@ import com.imac.wallk.fragment.AccountFragment;
 import com.imac.wallk.fragment.CameraFragment;
 import com.imac.wallk.fragment.GalleryFragment;
 import com.imac.wallk.fragment.LoginFragment;
+import com.imac.wallk.fragment.MapFragment;
 import com.imac.wallk.fragment.SignupFragment;
 import com.parse.ParseUser;
 
@@ -20,6 +21,7 @@ public class WallkActivity extends FragmentActivity {
 	public GalleryFragment galleryFrag = null;
 	public LoginFragment loginFrag = null;
 	public SignupFragment signupFrag = null;
+	public MapFragment mapFrag = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class WallkActivity extends FragmentActivity {
 		}
 
 		case R.id.action_map: {
-			// TODO : Load map fragment
+			showFragment(this.mapFrag);
 			break;
 		}
 
@@ -105,6 +107,7 @@ public class WallkActivity extends FragmentActivity {
 		this.galleryFrag = new GalleryFragment();
 		this.loginFrag = new LoginFragment();
 		this.signupFrag = new SignupFragment();
+		this.mapFrag = new MapFragment();
 	}
 
 	public void showFragment(Fragment fragment) {
@@ -130,5 +133,9 @@ public class WallkActivity extends FragmentActivity {
 
 	public SignupFragment getSignupFrag() {
 		return signupFrag;
+	}
+
+	public MapFragment getMapFrag() {
+		return mapFrag;
 	}
 }
