@@ -24,6 +24,7 @@ public class GalleryFragment extends ListFragment {
 	private ParseQueryAdapter<Artwork> mainAdapter;
 	private UserArtworkAdapter userAdapter;
 	private FavoriteArtworkAdapter favoritesAdapter;
+	private ProgressDialog progressDialog;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,45 +33,25 @@ public class GalleryFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 
 		// Set up a progress dialog
-		final ProgressDialog dlg = new ProgressDialog(
+		progressDialog = new ProgressDialog(
 				getActivity());
-		dlg.setTitle("Please wait.");
-		dlg.setMessage("Charging all pictures. Please wait.");
-		dlg.show();
 		mainAdapter = new ParseQueryAdapter<Artwork>(this.getActivity(), Artwork.class);
 		mainAdapter.setTextKey("title");
 		mainAdapter.setImageKey("photo");
 
-		// Subclass of ParseQueryAdapter
 		//adapters allow to sort pictures
 		favoritesAdapter = new FavoriteArtworkAdapter(this.getActivity());
 		//sort pictures by user
 		userAdapter = new UserArtworkAdapter(this.getActivity());
 		
-		mainAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Artwork>() {
-		   public void onLoading() {
-		     // Trigger any "loading" UI
-		   }
-		
-			@Override
-			public void onLoaded(List<Artwork> objects, Exception e) {
-				dlg.dismiss();
-			}
-		});
-		// Default view is all artworks
-		setListAdapter(mainAdapter);
-		
-		
 		return inflater.inflate(R.layout.listfragment_gallery, container, false);
 	}
 	
 	public void updateArtworkList() {
-		// Set up a progress dialog
-		final ProgressDialog dlg = new ProgressDialog(
-				getActivity());
-		dlg.setTitle("Please wait.");
-		dlg.setMessage("Charging all pictures. Please wait.");
-		dlg.show();
+		// Show progressDialog
+		progressDialog.setTitle("Please wait.");
+		progressDialog.setMessage("Charging all pictures. Please wait.");
+		progressDialog.show();
 		mainAdapter.loadObjects();
 		
 		mainAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Artwork>() {
@@ -80,7 +61,7 @@ public class GalleryFragment extends ListFragment {
 			
 				@Override
 				public void onLoaded(List<Artwork> objects, Exception e) {
-					dlg.dismiss();
+					progressDialog.dismiss();
 				}
 		});
 		
@@ -88,12 +69,9 @@ public class GalleryFragment extends ListFragment {
 	}
 
 	private void showFavoritesArtworks() {
-		// Set up a progress dialog
-		final ProgressDialog dlg = new ProgressDialog(
-				getActivity());
-		dlg.setTitle("Please wait.");
-		dlg.setMessage("Charging favorite pictures. Please wait.");
-		dlg.show();
+		progressDialog.setTitle("Please wait.");
+		progressDialog.setMessage("Charging favorite pictures. Please wait.");
+		progressDialog.show();
 		mainAdapter.loadObjects();
 				
 		favoritesAdapter.loadObjects();
@@ -104,19 +82,16 @@ public class GalleryFragment extends ListFragment {
 		
 			@Override
 			public void onLoaded(List<Artwork> objects, Exception e) {
-				dlg.dismiss();
+				progressDialog.dismiss();
 			}
 		});
 		setListAdapter(favoritesAdapter);
 	}
 	
 	public void showUserArtworks(){
-		
-		final ProgressDialog dlg = new ProgressDialog(
-				getActivity());
-		dlg.setTitle("Please wait.");
-		dlg.setMessage("Charging your pictures. Please wait.");
-		dlg.show();
+		progressDialog.setTitle("Please wait.");
+		progressDialog.setMessage("Charging your pictures. Please wait.");
+		progressDialog.show();
 		
 		userAdapter.loadObjects();
 		userAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Artwork>() {
@@ -126,7 +101,7 @@ public class GalleryFragment extends ListFragment {
 			
 				@Override
 				public void onLoaded(List<Artwork> objects, Exception e) {
-					dlg.dismiss();
+					progressDialog.dismiss();
 				}
 		});
 		
