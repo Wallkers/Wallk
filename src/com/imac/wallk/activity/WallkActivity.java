@@ -26,7 +26,7 @@ public class WallkActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// hide the title in the action bar
-		//getActionBar().setDisplayShowTitleEnabled(false);
+		getActionBar().setDisplayShowTitleEnabled(false);
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);

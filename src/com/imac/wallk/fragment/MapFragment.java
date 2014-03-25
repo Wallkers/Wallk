@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +97,7 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	*/
 	// Map fragment
 	private SupportMapFragment map;
+	private static View view = null;
 
 	// Represents the circle around a map
 	private Circle mapCircle;
@@ -124,7 +126,15 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.activity_map, container, false);
+		if (view != null) {
+			ViewGroup parent = (ViewGroup) view.getParent();
+			if (parent != null) parent.removeView(view); 
+		}
+		try { 
+			view = inflater.inflate(R.layout.activity_map, container, false); 
+		} catch (InflateException e) { 
+			return view;
+		}
 		
 		radius = m_searchDistance;
 		lastRadius = radius;
@@ -172,7 +182,7 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 					}
 				});
 		
-		return v;
+		return view;
 	}
 	
 	/*
