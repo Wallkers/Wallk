@@ -11,29 +11,14 @@ import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
-import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
-import com.parse.ParseUser;
 
-/*
- * The UserArtworkAdapter is an extension of ParseQueryAdapter
- * that has a custom layout for artworks of the user
- */
-public class UserArtworkAdapter extends ParseQueryAdapter<Artwork>{
-	
-	public UserArtworkAdapter(Context context) {
-		super(context, new ParseQueryAdapter.QueryFactory<Artwork>() {
-			public ParseQuery<Artwork> create() {
-				// Here we can configure a ParseQuery to display
-				// only user artworks.
-				ParseQuery<Artwork> query = new ParseQuery<Artwork>("Artwork");
-				query.whereEqualTo("author", ParseUser.getCurrentUser());
-				query.orderByAscending("date");
-				return query;
-			}
-		});
+public class AllArtworkAdapter extends ParseQueryAdapter<Artwork> {
+
+	public AllArtworkAdapter(Context context) {
+		super(context, Artwork.class);
 	}
-
+	
 	@Override
 	public View getItemView(Artwork artwork, View v, ViewGroup parent) {
 

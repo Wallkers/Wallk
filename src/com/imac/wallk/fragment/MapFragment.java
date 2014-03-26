@@ -1,5 +1,8 @@
 package com.imac.wallk.fragment;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -93,7 +96,32 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 	// Maximum post search radius for map in kilometers
 	private static final int MAX_POST_SEARCH_DISTANCE = 100;
-
+	
+	//Array that gives the real distance ratio for the zoom level
+	private static final List<Double> GOOGLE_ZOOM_RATIO;
+	static {
+		List<Double> list = Arrays.asList(591657550.500000, 
+										295828775.300000, 
+										147914387.600000,
+										73957193.820000,
+										36978596.910000,
+										18489298.450000,
+										9244649.227000,
+										4622324.614000,
+										2311162.307000,
+										1155581.153000,
+										577790.576700,
+										288895.288400,
+										144447.644200,
+										72223.822090,
+										36111.911040,
+										18055.955520,
+										9027.977761,
+										4513.988880,
+										2256.994440,
+										1128.497220);
+		GOOGLE_ZOOM_RATIO = list;
+    }
 	/*
 	* Other class member variables
 	*/
@@ -179,7 +207,32 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			        	otherLocation = new Location("Other");
 			    		otherLocation.setLatitude(point.latitude);
 			    		otherLocation.setLongitude(point.longitude);
-			    		onResume();
+
+			    		//Create a new research area and animate zoom on its center
+//			    		LatLngBounds bounds = calculateBoundsWithCenter(point);
+//			    	    LatLng cor1 = bounds.northeast;
+//			    	    LatLng cor2 = bounds.southwest; 
+//			    	    LatLng cor3 = new LatLng(cor2.latitude, cor1.longitude); 
+//			    	    LatLng cor4 = new LatLng(cor1.latitude, cor2.longitude); 
+//			    	    float[] width = new float[1];
+//			    	    Location.distanceBetween(cor1.latitude, cor1.longitude, cor3.latitude, cor3.longitude, width); 
+//			    	    float[] height = new float[1];
+//			    	    Location.distanceBetween(cor1.latitude, cor1.longitude, cor4.latitude, cor4.longitude, width);
+			    	    System.out.println("Zoom : " + map.getMap().getCameraPosition().zoom);
+			    	    int zoom = (int) Math.floor(map.getMap().getCameraPosition().zoom);
+			    	    double ratio = GOOGLE_ZOOM_RATIO.get(zoom -1);
+			    	    //System.out.println("MAP says width : " + width[0] + " and height : " + height[0] );
+			    	    if(map.getMap().getCameraPosition().zoom > 5 && map.getMap().getCameraPosition().zoom < 15){
+			    	    	m_searchDistance = ratio/100;
+			  
+			    	    }else{
+			    	    	m_searchDistance = ratio/100;
+			    	    }
+			    	    System.out.println("MAP says search distance = " + m_searchDistance );
+			    	    updateZoom(point);
+			    	    
+			    	    //Update
+			    	    onResume();
 			        }
 			    });
 		
@@ -524,34 +577,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		LatLngBounds bounds = calculateBoundsWithCenter(myLatLng);
 		// Zoom to the given bounds
 		map.getMap().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
-		
-	    LatLng cor1 = bounds.northeast;
-	    LatLng cor2 = bounds.southwest; 
-	    LatLng cor3 = new LatLng(cor2.latitude, cor1.longitude); 
-	    LatLng cor4 = new LatLng(cor1.latitude, cor2.longitude); 
-	    double width = computeDistanceBetween(cor1,cor3); 
-	    double height = computeDistanceBetween(cor1, cor4);
-	    
-	    radius = Math.max(width, height);
-	    updateCircle(myLatLng);
-	    doMapQuery();
-	    
-	}
-	
-	double rad(double x) {
-		  return x * Math.PI / 180;
-		};
-	
-	double computeDistanceBetween(LatLng p1, LatLng p2){
-		  int R = 6378137; // Earth’s mean radius in meter
-		  double dLat = rad(p2.latitude - p1.latitude);
-		  double dLong = rad(p2.longitude - p1.longitude);
-		  double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-		    Math.cos(rad(p1.latitude)) * Math.cos(rad(p2.latitude)) *
-		    Math.sin(dLong / 2) * Math.sin(dLong / 2);
-		  double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		  double d = R * c;
-		  return d; // returns the distance in meter
 	}
 
 	/*
