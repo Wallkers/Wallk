@@ -61,7 +61,7 @@ public class GalleryFragment extends ListFragment {
 					progressDialog.dismiss();
 				}
 		});
-		
+
 		setListAdapter(mainAdapter);
 	}
 
