@@ -22,7 +22,7 @@
         android:id="@+id/action_submenu_account"
         android:showAsAction="always"
         android:title="@string/action_account"
-        android:icon="@drawable/ic_action_person_w">
+        android:icon="@drawable/ic_action_person">
         
         <menu>
             <item

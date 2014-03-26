@@ -1,5 +1,6 @@
 package com.imac.wallk.fragment;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,6 +26,13 @@ public class AccountFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_account, parent, false);
+		
+		// change font
+		TextView titleView = (TextView) v.findViewById(R.id.myaccount_title_label);
+		Typeface titleFont = Typeface.createFromAsset(
+				getActivity().getAssets(), "PermanentMarker.ttf");
+		titleView.setTypeface(titleFont);
+		
 		usernameView = (TextView) v.findViewById(R.id.username);
 		usernameView.setText(ParseUser.getCurrentUser().getUsername());
 		

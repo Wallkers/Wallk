@@ -67,6 +67,8 @@
     <string name="connection_error_unknown">An unknown error occurred</string>
     
     <!-- LOCATION -->
+    <string name="title_activity_map">Street Map</string>
+    <string name="mapKey">AIzaSyCpg2TU6vJJRfHwWpQ7yQ63Q8BxY-TPsKM</string>
     <!-- Address format -->
     <string name="address_output_string">%1$s %2$s %3$s</string>
 
@@ -121,13 +123,14 @@
     
     <!-- ACCOUNT -->
     <string name="newTitle">New :</string>
-    <string name="usernameTitle">Username :</string>
+    <string name="usernameTitle">Username : </string>
     <string name="formerUsername">Former Username :</string>
     <string name="error_same_username">enter a new name</string>
     <string name="mail_title">Your mail :</string>
     <string name="password_mail_ok">The mail was successfully sent</string>
+    <string name="account_title">My Account</string>
  
-    <string name="passwordTitle">Password :</string>
+    <string name="passwordTitle">Password : </string>
     <string name="fakePassword">********</string>
     <string name="change">Change</string>
     <string name="changePasswordExplanation">Press OK will send you an email allowing you to choose a new password</string>
@@ -135,11 +138,41 @@
     <!-- In dialog popup for changing username or password -->
     <string name="formerTitle">Current:</string>
     <string name="newTitle">New:</string>
-    
+
     <!-- picture fragment -->
     <string name="title">Title :</string>
     <string name="cancel">Cancel</string>
     <string name="publish">Publish</string>
+
+     <!-- LOGIN SIGNUP -->
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_password_again">Password Again</string>
+    <string name="action_sign_in_register"><b>Sign in</b> or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_forgot_password">Recover lost password</string>
+    <string name="login_progress_signing_in">Signing in&#8230;</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_intro">"Please "</string>
+    <string name="error_blank_username">enter a username</string>
+    <string name="error_blank_password">enter a password</string>
+    <string name="error_mismatched_passwords">enter the same password twice</string>
+    <string name="error_join">", and "</string>
+    <string name="error_end">.</string>
+    <string name="bg_login_description">Log In or Sign Up</string> 
+    <string name="ok">OK</string>
+    <string name="title_login">Log In</string>
+    <string name="title_signup">Sign Up</string>
+    
+    <!-- CAMERA -->
+    <string name="title_activity_camera">Shot a Tag</string>
+    
+    <!-- GALLERY -->
+    <string name="title_activity_gallery">Tags Gallery</string>
     
     
 </resources>
