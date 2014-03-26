@@ -107,6 +107,7 @@ public class LoginFragment extends Fragment {
 		return v;
 	}
 
+	//check if string is empty
 	private boolean isEmpty(EditText etText) {
 		if (etText.getText().toString().trim().length() > 0) {
 			return false;
