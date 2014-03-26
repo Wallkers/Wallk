@@ -3,6 +3,8 @@ package com.imac.wallk.fragment;
 import java.util.List;
 
 import android.app.ProgressDialog;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -13,13 +15,16 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.imac.wallk.Artwork;
 import com.imac.wallk.R;
 import com.imac.wallk.adapter.AllArtworkAdapter;
-import com.imac.wallk.adapter.FavoriteArtworkAdapter;
 import com.imac.wallk.adapter.UserArtworkAdapter;
+import com.parse.GetDataCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseImageView;
 import com.parse.ParseQueryAdapter.OnQueryLoadListener;
 
 public class GalleryFragment extends ListFragment {
@@ -27,11 +32,13 @@ public class GalleryFragment extends ListFragment {
 	//filters
 	private AllArtworkAdapter mainAdapter;
 	private UserArtworkAdapter userAdapter;
-	private FavoriteArtworkAdapter favoritesAdapter;
 	private ProgressDialog progressDialog = null;
 	
 	private FrameLayout loadingPage = null;
+	private FrameLayout galleryToShow = null;
+	private TextView titleView = null;
 	private ListView listOfPictures =  null;
+	private ParseImageView parseImgView;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,26 +48,19 @@ public class GalleryFragment extends ListFragment {
 		
 		// Get layout elements
 		loadingPage = (FrameLayout) v.findViewById(R.id.loading_page);
-		
+		galleryToShow = (FrameLayout) v.findViewById(R.id.gallery_to_show);
+		titleView = (TextView) galleryToShow.findViewById(R.id.gallery_title);
+		Typeface titleFont = Typeface.createFromAsset(
+				getActivity().getAssets(), "PermanentMarker.ttf");
+		titleView.setTypeface(titleFont);
+		parseImgView = (ParseImageView) v.findViewById(R.id.picture_to_display);
+
 		if(listOfPictures == null){
 			listOfPictures = (ListView)v.findViewById(android.R.id.list);
 		}
 		
-		listOfPictures.setOnItemClickListener(new OnItemClickListener() {
-		public void onItemClick(AdapterView<?> parent, View view,int position, long id) 
-	    {
-	      String selectedFromList = (listOfPictures.getItemAtPosition(position).getClass().toString());
-	      Toast.makeText(
-					getActivity().getApplicationContext(),
-					"type: " + selectedFromList,
-					Toast.LENGTH_SHORT).show();
-
-	    }});
-	    Log.d("coucou", "toi");
 		mainAdapter = new AllArtworkAdapter(this.getActivity());
-
-		//adapters allow to sort pictures
-		favoritesAdapter = new FavoriteArtworkAdapter(this.getActivity());
+		
 		//sort pictures by user
 		userAdapter = new UserArtworkAdapter(this.getActivity());
 		
@@ -79,7 +79,6 @@ public class GalleryFragment extends ListFragment {
 		progressDialog.setMessage("Charging all pictures. Please wait.");
 		progressDialog.show();
 		mainAdapter.loadObjects();
-		
 		mainAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Artwork>() {
 			   public void onLoading() {
 			     // Trigger any "loading" UI
@@ -87,31 +86,13 @@ public class GalleryFragment extends ListFragment {
 			
 				@Override
 				public void onLoaded(List<Artwork> objects, Exception e) {
+					clickReactionOnGallery();
 					progressDialog.dismiss();
-					loadingPage.setVisibility(View.GONE);
+					showGallery();
+					titleView.setText(R.string.title_activity_gallery);
 				}
 		});
 		setListAdapter(mainAdapter);
-	}
-
-	private void showFavoritesArtworks() {
-		progressDialog.setTitle("Please wait.");
-		progressDialog.setMessage("Charging favorite pictures. Please wait.");
-		progressDialog.show();
-		mainAdapter.loadObjects();
-				
-		favoritesAdapter.loadObjects();
-		favoritesAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Artwork>() {
-		   public void onLoading() {
-		     // Trigger any "loading" UI
-		   }
-		
-			@Override
-			public void onLoaded(List<Artwork> objects, Exception e) {
-				progressDialog.dismiss();
-			}
-		});
-		setListAdapter(favoritesAdapter);
 	}
 	
 	public void showUserArtworks(){
@@ -127,11 +108,40 @@ public class GalleryFragment extends ListFragment {
 			
 				@Override
 				public void onLoaded(List<Artwork> objects, Exception e) {
+					clickReactionOnGallery();
 					progressDialog.dismiss();
+					showGallery();
+					titleView.setText(R.string.title_activity_mygallery);
 				}
 		});
 		
 		setListAdapter(userAdapter);
+	}
+	
+
+	private void clickReactionOnGallery(){
+		Log.d("COUNT", Integer.toString(listOfPictures.getCount()));
+		listOfPictures.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,int position, long id) 
+		    {
+		      Artwork artworkSelected = (Artwork)listOfPictures.getItemAtPosition(position);
+		      //String title = artworkSelected.getTitle();
+		      ParseFile picture = artworkSelected.getPhotoFile();
+		      parseImgView.setParseFile(picture);
+		      parseImgView.loadInBackground(new GetDataCallback() {
+					@Override
+					public void done(byte[] data, ParseException e) {
+						parseImgView.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
+					}
+				});
+				
+		}});
+	}
+
+	private void showGallery() {
+		loadingPage.setVisibility(View.GONE);
+		galleryToShow.setVisibility(View.VISIBLE);
+
 	}
 
 }

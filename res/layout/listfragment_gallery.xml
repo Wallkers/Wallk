@@ -2,16 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
     android:orientation="vertical" >
 
-    <ListView
-        android:id="@id/android:list"
+    <FrameLayout
+        android:id="@+id/gallery_to_show"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:drawSelectorOnTop="false"
-        android:padding="10dp" />
+        android:visibility="gone" >
+
+        <com.parse.ParseImageView
+            android:id="@+id/picture_to_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/gallery_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:padding="5dp"
+                android:text="@string/title_activity_gallery"
+                android:textColor="#ffffff"
+                android:textSize="35sp" />
+
+            <ListView
+                android:id="@id/android:list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawSelectorOnTop="false"
+                android:padding="10dp" />
+        </LinearLayout>
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/loading_page"
