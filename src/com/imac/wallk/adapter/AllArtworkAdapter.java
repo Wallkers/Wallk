@@ -17,18 +17,7 @@ import com.parse.ParseQueryAdapter;
 public class AllArtworkAdapter extends ParseQueryAdapter<Artwork> {
 
 	public AllArtworkAdapter(Context context) {
-		super(context, new ParseQueryAdapter.QueryFactory<Artwork>() {
-			public ParseQuery<Artwork> create() {
-				ParseQuery<Artwork> query = new ParseQuery<Artwork>("Artwork");
-				try {
-					query.find();
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				query.orderByDescending("createdAt");
-				return query;
-			}
-		});
+		super(context, Artwork.class);
 	}
 	
 	@Override
