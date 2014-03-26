@@ -2,13 +2,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="3dp" >
+    android:gravity="left">
 
     <com.parse.ParseImageView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:background="#222222"
-        android:padding="1dp" />
+        android:layout_height="80dp" />
 
 </LinearLayout>

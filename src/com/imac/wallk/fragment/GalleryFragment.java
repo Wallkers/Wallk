@@ -39,6 +39,7 @@ public class GalleryFragment extends ListFragment {
 	private TextView titleView = null;
 	private ListView listOfPictures =  null;
 	private ParseImageView parseImgView;
+	private ParseFile parseFileToLoad = null;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,6 +91,9 @@ public class GalleryFragment extends ListFragment {
 					progressDialog.dismiss();
 					showGallery();
 					titleView.setText(R.string.title_activity_gallery);
+					if(parseFileToLoad != null) {
+						openParseFile(parseFileToLoad);
+					}
 				}
 		});
 		setListAdapter(mainAdapter);
@@ -112,6 +116,9 @@ public class GalleryFragment extends ListFragment {
 					progressDialog.dismiss();
 					showGallery();
 					titleView.setText(R.string.title_activity_mygallery);
+					if(parseFileToLoad != null) {
+						openParseFile(parseFileToLoad);
+					}
 				}
 		});
 		
@@ -123,25 +130,35 @@ public class GalleryFragment extends ListFragment {
 		Log.d("COUNT", Integer.toString(listOfPictures.getCount()));
 		listOfPictures.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) 
-		    {
-		      Artwork artworkSelected = (Artwork)listOfPictures.getItemAtPosition(position);
-		      //String title = artworkSelected.getTitle();
-		      ParseFile picture = artworkSelected.getPhotoFile();
-		      parseImgView.setParseFile(picture);
-		      parseImgView.loadInBackground(new GetDataCallback() {
-					@Override
-					public void done(byte[] data, ParseException e) {
-						parseImgView.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
-					}
-				});
+			{
+				Artwork artworkSelected = (Artwork)listOfPictures.getItemAtPosition(position);
+				parseFileToLoad = artworkSelected.getPhotoFile();
+				openParseFile(parseFileToLoad);
 				
-		}});
+			}
+		});
+	}
+
+	public void setParseFileToLoad(ParseFile parseFileToLoad) {
+		this.parseFileToLoad = parseFileToLoad;
 	}
 
 	private void showGallery() {
 		loadingPage.setVisibility(View.GONE);
 		galleryToShow.setVisibility(View.VISIBLE);
 
+	}
+	
+	private void openParseFile(ParseFile file){
+		if(parseImgView != null){
+			parseImgView.setParseFile(file);
+			parseImgView.loadInBackground(new GetDataCallback() {
+				@Override
+				public void done(byte[] data, ParseException e) {
+					
+				}
+			});
+		}
 	}
 
 }

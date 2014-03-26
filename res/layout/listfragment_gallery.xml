@@ -29,12 +29,12 @@
                 android:layout_marginBottom="5dp"
                 android:padding="5dp"
                 android:text="@string/title_activity_gallery"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:textSize="35sp" />
 
             <ListView
                 android:id="@id/android:list"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawSelectorOnTop="false"

@@ -1,17 +1,13 @@
 package com.imac.wallk.fragment;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.lang.Math;
 
 import android.content.IntentSender;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -42,12 +38,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.imac.wallk.Artwork;
 import com.imac.wallk.R;
+import com.imac.wallk.activity.WallkActivity;
 import com.parse.FindCallback;
-import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
@@ -149,7 +144,6 @@ OnInfoWindowClickListener{
 	private String selectedObjectId;
 	private Location lastLocation = null;
 	private Location currentLocation = null;
-	private ParseImageView parseImgView = null;
 	
 	//If the user click on a different location from his own
 	private Location otherLocation = null;
@@ -178,7 +172,6 @@ OnInfoWindowClickListener{
 		
 		radius = m_searchDistance;
 		lastRadius = radius;
-		parseImgView = (ParseImageView) container.findViewById(R.id.picture_to_display);
 		// Create a new global location parameters object
 				locationRequest = LocationRequest.create();
 
@@ -523,13 +516,11 @@ OnInfoWindowClickListener{
 				                	try {
 										Artwork artwork = mapQuery.get(s);
 										ParseFile picture = artwork.getPhotoFile();
-									    parseImgView.setParseFile(picture);
-									    parseImgView.loadInBackground(new GetDataCallback() {
-											@Override
-											public void done(byte[] data, ParseException e) {
-												parseImgView.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
-											}
-									    });
+										GalleryFragment galleryFragment = ((WallkActivity)getActivity()).getGalleryFrag();
+										galleryFragment.setParseFileToLoad(picture);
+										((WallkActivity)getActivity()).showFragment(galleryFragment);
+										galleryFragment.showAllArtworks();
+										((WallkActivity)getActivity()).colorMenuIcon(R.drawable.ic_action_view_as_grid);
 									} catch (ParseException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
