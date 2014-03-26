@@ -12,8 +12,10 @@ import com.parse.ParseException;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +33,6 @@ public class GalleryFragment extends ListFragment {
 			Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-
 		// Set up a progress dialog
 		progressDialog = new ProgressDialog(getActivity());
 		mainAdapter = new ParseQueryAdapter<Artwork>(this.getActivity(), Artwork.class);
@@ -42,13 +43,10 @@ public class GalleryFragment extends ListFragment {
 		favoritesAdapter = new FavoriteArtworkAdapter(this.getActivity());
 		//sort pictures by user
 		userAdapter = new UserArtworkAdapter(this.getActivity());
-		
-		updateArtworkList();
-		
 		return inflater.inflate(R.layout.listfragment_gallery, container, false);
 	}
 	
-	public void updateArtworkList() {
+	public void showAllArtworks() {
 		// Show progressDialog
 		progressDialog.setTitle("Please wait.");
 		progressDialog.setMessage("Charging all pictures. Please wait.");
@@ -108,4 +106,5 @@ public class GalleryFragment extends ListFragment {
 		
 		setListAdapter(userAdapter);
 	}
+
 }

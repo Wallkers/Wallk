@@ -37,7 +37,6 @@ public class CameraFragment extends Fragment{
 
 	private Camera camera;
 	private SurfaceView surfaceView;
-	private ParseFile photoFile;
 	private ImageButton photoButton;
 
 	@Override
@@ -128,60 +127,6 @@ public class CameraFragment extends Fragment{
 		});
 
 		return v;
-	}
-
-	/*
-	 * ParseQueryAdapter loads ParseFiles into a ParseImageView at whatever size
-	 * they are saved. Since we never need a full-size image in our app, we'll
-	 * save a scaled one right away.
-	 */
-	private void saveScaledPhoto(byte[] data) {
-
-		// Resize photo from camera byte array
-		Bitmap artworkImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-		Bitmap artworkImageScaled = Bitmap.createScaledBitmap(artworkImage, 200, 200
-				* artworkImage.getHeight() / artworkImage.getWidth(), false);
-
-		// Override Android default landscape orientation and save portrait
-		Matrix matrix = new Matrix();
-		matrix.postRotate(90);
-		Bitmap rotatedScaledArtworkImage = Bitmap.createBitmap(artworkImageScaled, 0,
-				0, artworkImageScaled.getWidth(), artworkImageScaled.getHeight(),
-				matrix, true);
-
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		rotatedScaledArtworkImage.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-
-		byte[] scaledData = bos.toByteArray();
-
-		// Save the scaled image to Parse
-		photoFile = new ParseFile("artwork_photo.jpg", scaledData);
-		photoFile.saveInBackground(new SaveCallback() {
-
-			public void done(ParseException e) {
-				if (e != null) {
-					Toast.makeText(getActivity(),
-							"Error saving: " + e.getMessage(),
-							Toast.LENGTH_LONG).show();
-				} else {
-					addPhotoToArtworkAndReturn(photoFile);
-				}
-			}
-		});
-	}
-
-	/*
-	 * Once the photo has saved successfully, we're ready to return to the
-	 * NewArtworkFragment. When we added the CameraFragment to the back stack, we
-	 * named it "NewArtworkFragment". Now we'll pop fragments off the back stack
-	 * until we reach that Fragment.
-	 */
-	private void addPhotoToArtworkAndReturn(ParseFile photoFile) {
-		((NewArtworkActivity)getActivity()).getCurrentArtwork().setPhotoFile(
-				photoFile);
-		FragmentManager fm = getActivity().getSupportFragmentManager();
-		fm.popBackStack("NewArtworkFragment",
-				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
 	@Override

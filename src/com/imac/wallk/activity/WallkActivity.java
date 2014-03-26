@@ -38,7 +38,7 @@ public class WallkActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 
 		setupFragments();
-		showFragment(this.galleryFrag);		
+		showFragment(this.galleryFrag);	
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class WallkActivity extends FragmentActivity {
 		case R.id.action_gallery: {
 			uncolorMenuIcon();
 			showFragment(this.galleryFrag);
-			this.galleryFrag.updateArtworkList();
+			this.galleryFrag.showAllArtworks();
 			galleryItem.setIcon(R.drawable.ic_action_view_as_grid_selected);
 			break;
 		}

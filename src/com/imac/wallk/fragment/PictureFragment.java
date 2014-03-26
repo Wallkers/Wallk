@@ -57,6 +57,8 @@ public class PictureFragment extends Fragment implements LocationListener,
 	private Artwork artwork;
 	private ParseFile photoFile;
 	private EditText pictureTitle;
+	private Bitmap tempPicture;
+	private ProgressDialog progressDialog;
 	
 	//Data for localisation
 	private Location lastLocation = null;
@@ -111,11 +113,16 @@ public class PictureFragment extends Fragment implements LocationListener,
 		
 		pictureTitle = ((EditText) v.findViewById(R.id.picture_title));
 		
-		//Read the picture taken by the user
-		Bitmap tempPicture;
         try {
 			// Get the last picture created in CameraFragment
 			tempPicture = BitmapFactory.decodeFile(getActivity().getFilesDir() + "/temporaryPicture.jpg");
+
+			// Override Android default landscape orientation and save portrait
+			Matrix matrix = new Matrix();
+			matrix.postRotate(90);
+			tempPicture = Bitmap.createBitmap(tempPicture, 0,
+					0, tempPicture.getWidth(), tempPicture.getHeight(),
+					matrix, true);
 			//display it
             ImageView imgView=(ImageView)v.findViewById(R.id.picture_image_view);
             imgView.setImageBitmap(tempPicture);
@@ -150,7 +157,7 @@ public class PictureFragment extends Fragment implements LocationListener,
 			@Override
 			public void onClick(View v) {
 				//save the picture online
-				saveScaledPhotoOnParse("temporaryPicture.jpg");
+				saveScaledPhotoOnParse(tempPicture);
 			}
 		});
 
@@ -164,23 +171,18 @@ public class PictureFragment extends Fragment implements LocationListener,
 	 * save a scaled one.
 	 * If saving succeed, we go to the user gallery
 	 */
-	private void saveScaledPhotoOnParse(String fileName) {
-
-		Bitmap artworkImage = BitmapFactory.decodeFile(getActivity().getFilesDir() + "/" + fileName);
+	private void saveScaledPhotoOnParse(Bitmap artworkImage) {
+		
 		//Resize photo from camera byte array
 		//Bitmap artworkImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-		Bitmap artworkImageScaled = Bitmap.createScaledBitmap(artworkImage, 200, 200
-				* artworkImage.getHeight() / artworkImage.getWidth(), false);
-
-		// Override Android default landscape orientation and save portrait
-		Matrix matrix = new Matrix();
-		matrix.postRotate(90);
-		Bitmap rotatedScaledArtworkImage = Bitmap.createBitmap(artworkImageScaled, 0,
-				0, artworkImageScaled.getWidth(), artworkImageScaled.getHeight(),
-				matrix, true);
-
+		//Bitmap artworkImageScaled = Bitmap.createScaledBitmap(artworkImage, 200, 200 * artworkImage.getHeight() / artworkImage.getWidth(), false);
+		progressDialog = new ProgressDialog(getActivity());
+		progressDialog.setTitle("Please wait.");
+		progressDialog.setMessage("Saving your picture. Please wait.");
+		progressDialog.show();
+		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		rotatedScaledArtworkImage.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+		artworkImage.compress(Bitmap.CompressFormat.JPEG, 100, bos);
 
 		byte[] scaledData = bos.toByteArray();
 		// Save the scaled image to Parse
@@ -209,6 +211,7 @@ public class PictureFragment extends Fragment implements LocationListener,
 			@Override
 			public void done(ParseException e) {
 				if (e != null) {
+					progressDialog.dismiss();
 					Toast.makeText(
 							getActivity().getApplicationContext(),
 							"Error saving: " + e.getMessage(),
@@ -220,6 +223,8 @@ public class PictureFragment extends Fragment implements LocationListener,
 					
 					//debug, see if deleted
 					((WallkActivity)getActivity()).logFilesSaved();
+					
+					progressDialog.dismiss();
 					
 					//go to user pictures gallery
 					GalleryFragment galleryFragment = ((WallkActivity)getActivity()).getGalleryFrag();
