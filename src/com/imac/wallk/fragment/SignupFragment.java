@@ -112,6 +112,7 @@ public class SignupFragment extends Fragment {
 									WallkActivity parentActivity = (WallkActivity) getActivity();
 									parentActivity.showFragment(parentActivity.getGalleryFrag());
 									parentActivity.getGalleryFrag().showUserArtworks();
+									parentActivity.colorMenuIcon(R.drawable.ic_action_person);
 									parentActivity.invalidateOptionsMenu();//recreate the menu now that we are logged
 								}
 							}
