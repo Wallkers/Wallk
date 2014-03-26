@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.lang.Math;
 
 import android.content.IntentSender;
 import android.graphics.Color;
@@ -50,7 +51,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	*/
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
-	private float m_searchDistance = 250;
+	private double m_searchDistance = 250;
 	/*
 	* Constants for location update parameters
 	*/
@@ -102,8 +103,8 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	private Circle mapCircle;
 
 	// Fields for the map radius in feet
-	private float radius;
-	private float lastRadius;
+	private double radius;
+	private double lastRadius;
 
 	// Fields for helping process map and location changes
 	private final Map<String, Marker> mapMarkers = new HashMap<String, Marker>();
@@ -513,6 +514,34 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		LatLngBounds bounds = calculateBoundsWithCenter(myLatLng);
 		// Zoom to the given bounds
 		map.getMap().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
+		
+	    LatLng cor1 = bounds.northeast;
+	    LatLng cor2 = bounds.southwest; 
+	    LatLng cor3 = new LatLng(cor2.latitude, cor1.longitude); 
+	    LatLng cor4 = new LatLng(cor1.latitude, cor2.longitude); 
+	    double width = computeDistanceBetween(cor1,cor3); 
+	    double height = computeDistanceBetween(cor1, cor4);
+	    
+	    radius = Math.max(width, height);
+	    updateCircle(myLatLng);
+	    doMapQuery();
+	    
+	}
+	
+	double rad(double x) {
+		  return x * Math.PI / 180;
+		};
+	
+	double computeDistanceBetween(LatLng p1, LatLng p2){
+		  int R = 6378137; // Earth’s mean radius in meter
+		  double dLat = rad(p2.latitude - p1.latitude);
+		  double dLong = rad(p2.longitude - p1.longitude);
+		  double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+		    Math.cos(rad(p1.latitude)) * Math.cos(rad(p2.latitude)) *
+		    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+		  double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		  double d = R * c;
+		  return d; // returns the distance in meter
 	}
 
 	/*
@@ -522,7 +551,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		// The return offset, initialized to the default difference
 		double latLngOffset = OFFSET_CALCULATION_INIT_DIFF;
 		// Set up the desired offset distance in meters
-		float desiredOffsetInMeters = radius * METERS_PER_FEET;
+		float desiredOffsetInMeters = (float) (m_searchDistance * METERS_PER_FEET);
 		// Variables for the distance calculation
 		float[] distance = new float[1];
 		boolean foundMax = false;
