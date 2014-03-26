@@ -11,6 +11,7 @@ import java.util.Set;
 import java.lang.Math;
 
 import android.content.IntentSender;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -41,14 +43,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.imac.wallk.Artwork;
 import com.imac.wallk.R;
 import com.parse.FindCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 public class MapFragment extends Fragment implements LocationListener,
 GooglePlayServicesClient.ConnectionCallbacks,
-GooglePlayServicesClient.OnConnectionFailedListener{
+GooglePlayServicesClient.OnConnectionFailedListener,
+OnInfoWindowClickListener{
 	/*
 	* Define a request code to send to Google Play services This code is returned in
 	* Activity.onActivityResult
@@ -143,6 +149,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	private String selectedObjectId;
 	private Location lastLocation = null;
 	private Location currentLocation = null;
+	private ParseImageView parseImgView = null;
 	
 	//If the user click on a different location from his own
 	private Location otherLocation = null;
@@ -171,7 +178,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		
 		radius = m_searchDistance;
 		lastRadius = radius;
-		
+		parseImgView = (ParseImageView) container.findViewById(R.id.picture_to_display);
 		// Create a new global location parameters object
 				locationRequest = LocationRequest.create();
 
@@ -506,6 +513,31 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 						marker.showInfoWindow();
 						selectedObjectId = null;
 					}
+					map.getMap().setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+						
+				        @Override
+				        public void onInfoWindowClick(Marker marker) {
+				        	for(String s : mapMarkers.keySet()){
+				                if(mapMarkers.get(s).equals(marker)){
+				                	ParseQuery<Artwork> mapQuery = Artwork.getQuery();
+				                	try {
+										Artwork artwork = mapQuery.get(s);
+										ParseFile picture = artwork.getPhotoFile();
+									    parseImgView.setParseFile(picture);
+									    parseImgView.loadInBackground(new GetDataCallback() {
+											@Override
+											public void done(byte[] data, ParseException e) {
+												parseImgView.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
+											}
+									    });
+									} catch (ParseException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+				                }
+				                }
+				            }
+				        });
 				}
 				// Clean up old markers.
 				cleanUpMarkers(toKeep);
@@ -633,6 +665,12 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		builder.include(south);
 
 		return builder.build();
+	}
+
+	@Override
+	public void onInfoWindowClick(Marker arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
