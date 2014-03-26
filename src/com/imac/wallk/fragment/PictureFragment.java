@@ -1,46 +1,16 @@
 package com.imac.wallk.fragment;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.imac.wallk.Artwork;
-import com.imac.wallk.NewArtworkActivity;
-import com.imac.wallk.R;
-import com.imac.wallk.NewArtworkFragment.ErrorDialogFragment;
-import com.imac.wallk.activity.WallkActivity;
-import com.imac.wallk.adapter.FavoriteArtworkAdapter;
-import com.imac.wallk.adapter.UserArtworkAdapter;
-import com.parse.GetDataCallback;
-import com.parse.ParseFile;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseQueryAdapter;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-import com.parse.ParseQueryAdapter.OnQueryLoadListener;
-import com.parse.ParseException;
-
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.IntentSender;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +19,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.imac.wallk.Artwork;
+import com.imac.wallk.R;
+import com.imac.wallk.activity.WallkActivity;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class PictureFragment extends Fragment implements LocationListener,
 							GooglePlayServicesClient.ConnectionCallbacks,
@@ -224,6 +209,7 @@ public class PictureFragment extends Fragment implements LocationListener,
 					//go to user pictures gallery
 					GalleryFragment galleryFragment = ((WallkActivity)getActivity()).getGalleryFrag();
 					((WallkActivity) getActivity()).showFragment(galleryFragment);
+					((WallkActivity) getActivity()).colorMenuIcon(R.drawable.ic_action_view_as_grid);
 					galleryFragment.showUserArtworks();
 				}
 			}
