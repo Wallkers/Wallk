@@ -6,23 +6,37 @@
     android:orientation="vertical"
     android:padding="10dp" >
 
-    <ListView
-        android:id="@id/android:list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:divider="#ffffff"
-        android:drawSelectorOnTop="false"
-        android:textColor="#ffffff" />
+        android:layout_height="match_parent" >
+		
+        <com.parse.ParseImageView
+            android:id="@+id/picture_to_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop" 
+            android:src="@drawable/background_login"/>
+        
+        <ListView
+            android:id="@id/android:list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:divider="#ffffff"
+            android:drawSelectorOnTop="false"
+            android:textColor="#ffffff" />
 
-    <TextView
-        android:id="@id/android:empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:text="@string/nodata"
-        android:textColor="#ffffff"
-        android:textSize="15sp"
-        android:textStyle="italic" />
+        <TextView
+            android:id="@id/android:empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:text="@string/nodata"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:textStyle="italic" />
+
+        
+    </FrameLayout>
 
 </LinearLayout>
