@@ -87,47 +87,11 @@ public class GalleryFragment extends ListFragment {
 			
 				@Override
 				public void onLoaded(List<Artwork> objects, Exception e) {
-					Log.d("COUNT", Integer.toString(listOfPictures.getCount()));
-					listOfPictures.setOnItemClickListener(new OnItemClickListener() {
-						public void onItemClick(AdapterView<?> parent, View view,int position, long id) 
-					    {
-					      Artwork artworkSelected = (Artwork)listOfPictures.getItemAtPosition(position);
-					      //String title = artworkSelected.getTitle();
-					      ParseFile picture = artworkSelected.getPhotoFile();
-							if (picture != null) {
-								byte[] pictureData = null;
-								try {
-									pictureData = picture.getData();
-								} catch (ParseException e) {
-									e.printStackTrace();
-								}
-								parseImgView.setImageBitmap(BitmapFactory.decodeByteArray(pictureData, 0, pictureData.length));
-							}
-						    }});
+					clickReactionOnGallery();
 					progressDialog.dismiss();
 				}
 		});
 		setListAdapter(mainAdapter);
-	}
-
-	private void showFavoritesArtworks() {
-		progressDialog.setTitle("Please wait.");
-		progressDialog.setMessage("Charging favorite pictures. Please wait.");
-		progressDialog.show();
-		mainAdapter.loadObjects();
-				
-		favoritesAdapter.loadObjects();
-		favoritesAdapter.addOnQueryLoadListener(new OnQueryLoadListener<Artwork>() {
-		   public void onLoading() {
-		     // Trigger any "loading" UI
-		   }
-		
-			@Override
-			public void onLoaded(List<Artwork> objects, Exception e) {
-				progressDialog.dismiss();
-			}
-		});
-		setListAdapter(favoritesAdapter);
 	}
 	
 	public void showUserArtworks(){
@@ -143,11 +107,31 @@ public class GalleryFragment extends ListFragment {
 			
 				@Override
 				public void onLoaded(List<Artwork> objects, Exception e) {
+					clickReactionOnGallery();
 					progressDialog.dismiss();
 				}
 		});
 		
 		setListAdapter(userAdapter);
+	}
+	
+	private void clickReactionOnGallery(){
+		Log.d("COUNT", Integer.toString(listOfPictures.getCount()));
+		listOfPictures.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,int position, long id) 
+		    {
+		      Artwork artworkSelected = (Artwork)listOfPictures.getItemAtPosition(position);
+		      //String title = artworkSelected.getTitle();
+		      ParseFile picture = artworkSelected.getPhotoFile();
+		      parseImgView.setParseFile(picture);
+		      parseImgView.loadInBackground(new GetDataCallback() {
+					@Override
+					public void done(byte[] data, ParseException e) {
+						parseImgView.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
+					}
+				});
+				
+		}});
 	}
 
 }
