@@ -111,6 +111,7 @@ public class SignupFragment extends Fragment {
 									// change the fragment
 									WallkActivity parentActivity = (WallkActivity) getActivity();
 									parentActivity.showFragment(parentActivity.getGalleryFrag());
+									parentActivity.getGalleryFrag().showUserArtworks();
 									parentActivity.invalidateOptionsMenu();//recreate the menu now that we are logged
 								}
 							}
