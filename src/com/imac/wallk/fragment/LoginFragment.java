@@ -99,6 +99,7 @@ public class LoginFragment extends Fragment {
 											WallkActivity parentActivity = (WallkActivity) getActivity();
 											parentActivity.getGalleryFrag().showUserArtworks();
 											parentActivity.showFragment(parentActivity.getGalleryFrag());
+											parentActivity.colorMenuIcon(R.drawable.ic_action_person);
 											parentActivity.invalidateOptionsMenu();
 										}
 									}

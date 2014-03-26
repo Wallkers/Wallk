@@ -3,6 +3,7 @@ package com.imac.wallk.fragment;
 import java.util.List;
 
 import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -12,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imac.wallk.Artwork;
@@ -31,6 +34,8 @@ public class GalleryFragment extends ListFragment {
 	private ProgressDialog progressDialog = null;
 	
 	private FrameLayout loadingPage = null;
+	private LinearLayout galleryToShow = null;
+	private TextView titleView = null;
 	private ListView listOfPictures =  null;
 	
 	@Override
@@ -41,6 +46,11 @@ public class GalleryFragment extends ListFragment {
 		
 		// Get layout elements
 		loadingPage = (FrameLayout) v.findViewById(R.id.loading_page);
+		galleryToShow = (LinearLayout) v.findViewById(R.id.gallery_to_show);
+		titleView = (TextView) galleryToShow.findViewById(R.id.gallery_title);
+		Typeface titleFont = Typeface.createFromAsset(
+				getActivity().getAssets(), "PermanentMarker.ttf");
+		titleView.setTypeface(titleFont);
 		
 		if(listOfPictures == null){
 			listOfPictures = (ListView)v.findViewById(android.R.id.list);
@@ -88,7 +98,8 @@ public class GalleryFragment extends ListFragment {
 				@Override
 				public void onLoaded(List<Artwork> objects, Exception e) {
 					progressDialog.dismiss();
-					loadingPage.setVisibility(View.GONE);
+					showGallery();
+					titleView.setText(R.string.title_activity_gallery);
 				}
 		});
 		setListAdapter(mainAdapter);
@@ -128,10 +139,17 @@ public class GalleryFragment extends ListFragment {
 				@Override
 				public void onLoaded(List<Artwork> objects, Exception e) {
 					progressDialog.dismiss();
+					showGallery();
+					titleView.setText(R.string.title_activity_mygallery);
 				}
 		});
 		
 		setListAdapter(userAdapter);
+	}
+	
+	private void showGallery() {
+		loadingPage.setVisibility(View.GONE);
+		galleryToShow.setVisibility(View.VISIBLE);
 	}
 
 }
