@@ -1,9 +1,11 @@
 package com.imac.wallk.fragment;
 
+
 import com.imac.wallk.R;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ public class PictureFragment extends Fragment{
 			pictureTitle = (TextView) v.findViewById(R.id.picture_title);
 			return v;
 		}
+
 
 		public void setPictureTitle(String text) {
 			this.pictureTitle = new TextView(getActivity());

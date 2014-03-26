@@ -11,12 +11,24 @@ import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
+import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 public class AllArtworkAdapter extends ParseQueryAdapter<Artwork> {
 
 	public AllArtworkAdapter(Context context) {
-		super(context, Artwork.class);
+		super(context, new ParseQueryAdapter.QueryFactory<Artwork>() {
+			public ParseQuery<Artwork> create() {
+				ParseQuery<Artwork> query = new ParseQuery<Artwork>("Artwork");
+				try {
+					query.find();
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				query.orderByDescending("createdAt");
+				return query;
+			}
+		});
 	}
 	
 	@Override

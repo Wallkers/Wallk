@@ -46,7 +46,7 @@ public class GalleryFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 		View v = inflater.inflate(R.layout.listfragment_gallery, container, false);
 		
-		/*if(listOfPictures == null){
+		if(listOfPictures == null){
 			listOfPictures = (ListView)v.findViewById(android.R.id.list);
 		}
 		
@@ -60,7 +60,7 @@ public class GalleryFragment extends ListFragment {
 					Toast.LENGTH_SHORT).show();
 
 	    }});
-	      Log.d("coucou", "toi"); */
+	    Log.d("coucou", "toi");
 		mainAdapter = new AllArtworkAdapter(this.getActivity());
 
 		//adapters allow to sort pictures
