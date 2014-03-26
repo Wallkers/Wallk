@@ -117,7 +117,6 @@ public class MyDialogFragment extends DialogFragment {
 					}
 				});
 				
-				
 				return vPassword;
 		}
         

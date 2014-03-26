@@ -75,7 +75,7 @@ public class CameraFragment extends Fragment{
 					@Override
 					public void onPictureTaken(byte[] data, Camera camera) {
 						//Here we store the picture in local database, because we are not sure the user will save it online
-						//and we pass it to the fragment PictureFragment to display it, we will save it on Parse only if the user wants to publish it
+						//and we pass it to the fragment PictureConfirmFragment to display it, we will save it on Parse only if the user wants to publish it
 				        FileOutputStream outStream = null;
 				        try {
 				            // write to local sandbox file system
@@ -84,7 +84,8 @@ public class CameraFragment extends Fragment{
 				            outStream.close();
 				            Log.d(TAG, "onPictureTaken - wrote bytes: " + data.length);
 				            //launch picture fragment to display the picture taken
-				            ((WallkActivity) getActivity()).showFragment(new PictureFragment());
+				            ((WallkActivity) getActivity()).showFragment(new PictureConfirmFragment());
+				            
 				        } catch (FileNotFoundException e) {
 				            e.printStackTrace();
 				        } catch (IOException e) {

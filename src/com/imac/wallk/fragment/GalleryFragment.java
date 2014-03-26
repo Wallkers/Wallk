@@ -25,22 +25,42 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 public class GalleryFragment extends ListFragment {
 	
 	//filters
-	private Object firstCreation = null;
 	private AllArtworkAdapter mainAdapter;
 	private UserArtworkAdapter userAdapter;
 	private FavoriteArtworkAdapter favoritesAdapter;
 	private ProgressDialog progressDialog = null;
+	private ListView listOfPictures =  null;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		View v = inflater.inflate(R.layout.listfragment_gallery, container, false);
 		
+		/*if(listOfPictures == null){
+			listOfPictures = (ListView)v.findViewById(android.R.id.list);
+		}
+		
+		listOfPictures.setOnItemClickListener(new OnItemClickListener() {
+		public void onItemClick(AdapterView<?> parent, View view,int position, long id) 
+	    {
+	      String selectedFromList = (listOfPictures.getItemAtPosition(position).getClass().toString());
+	      Toast.makeText(
+					getActivity().getApplicationContext(),
+					"type: " + selectedFromList,
+					Toast.LENGTH_SHORT).show();
+
+	    }});
+	      Log.d("coucou", "toi"); */
 		mainAdapter = new AllArtworkAdapter(this.getActivity());
 
 		//adapters allow to sort pictures
@@ -50,10 +70,11 @@ public class GalleryFragment extends ListFragment {
 		
 		if(progressDialog == null){
 			progressDialog = new ProgressDialog(getActivity());
+			//the first time we open the fragment we charge all artworks
 			showAllArtworks();
 		}
 
-		return inflater.inflate(R.layout.listfragment_gallery, container, false);
+		return v;
 	}
 	
 	public void showAllArtworks() {
@@ -73,7 +94,6 @@ public class GalleryFragment extends ListFragment {
 					progressDialog.dismiss();
 				}
 		});
-
 		setListAdapter(mainAdapter);
 	}
 
