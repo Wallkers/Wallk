@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.lang.Math;
 
 import android.content.IntentSender;
 import android.graphics.Color;
@@ -24,6 +25,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -43,14 +45,14 @@ import com.parse.ParseQueryAdapter;
 
 public class MapFragment extends Fragment implements LocationListener,
 GooglePlayServicesClient.ConnectionCallbacks,
-GooglePlayServicesClient.OnConnectionFailedListener {
+GooglePlayServicesClient.OnConnectionFailedListener{
 	/*
 	* Define a request code to send to Google Play services This code is returned in
 	* Activity.onActivityResult
 	*/
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
-	private float m_searchDistance = 250;
+	private double m_searchDistance = 250;
 	/*
 	* Constants for location update parameters
 	*/
@@ -103,8 +105,8 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	private Circle mapCircle;
 
 	// Fields for the map radius in feet
-	private float radius;
-	private float lastRadius;
+	private double radius;
+	private double lastRadius;
 
 	// Fields for helping process map and location changes
 	private final Map<String, Marker> mapMarkers = new HashMap<String, Marker>();
@@ -113,6 +115,9 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	private String selectedObjectId;
 	private Location lastLocation = null;
 	private Location currentLocation = null;
+	
+	//If the user click on a different location from his own
+	private Location otherLocation = null;
 
 	// A request to connect to Location Services
 	private LocationRequest locationRequest;
@@ -154,22 +159,6 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 				// Create a new location client, using the enclosing class to handle callbacks.
 				locationClient = new LocationClient(this.getActivity(), this, this);
 
-				//// Set up a customized query
-				//ParseQueryAdapter.QueryFactory<Artwork> factory =
-				//    new ParseQueryAdapter.QueryFactory<Artwork>() {
-				//      public ParseQuery<Artwork> create() {
-				//        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
-				//        ParseQuery<Artwork> query = Artwork.getQuery();
-				//        query.include("user");
-				//        query.orderByDescending("createdAt");
-				//        query.whereWithinKilometers("location", geoPointFromLocation(myLoc), radius
-				//            * METERS_PER_FEET / METERS_PER_KILOMETER);
-				//        query.setLimit(MAX_POST_SEARCH_RESULTS);
-				//        return query;
-				//      }
-				//    };
-
-
 				// Set up the map fragment
 				map = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map);
 				// Enable the current location "blue dot"
@@ -181,6 +170,18 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 						doMapQuery();
 					}
 				});
+				
+				// When the user click on the map, we lead a new research for 
+				// artworks centered on the clicked point
+				map.getMap().setOnMapClickListener(new OnMapClickListener() {
+			        @Override
+			        public void onMapClick(LatLng point) {
+			        	otherLocation = new Location("Other");
+			    		otherLocation.setLatitude(point.latitude);
+			    		otherLocation.setLongitude(point.longitude);
+			    		onResume();
+			        }
+			    });
 		
 		return view;
 	}
@@ -222,8 +223,17 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 		// Get the latest search distance preference
 		radius = m_searchDistance;
 		// Checks the last saved location to show cached data if it's available
-		if (lastLocation != null) {
+		if (lastLocation != null && otherLocation == null) {
 			LatLng myLatLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+			// If the search distance preference has been changed, move
+			// map to new bounds.
+			if (lastRadius != radius) {
+				updateZoom(myLatLng);
+			}
+			// Update the circle map
+			updateCircle(myLatLng);
+		}else if (otherLocation != null){
+			LatLng myLatLng = new LatLng(otherLocation.getLatitude(), otherLocation.getLongitude());
 			// If the search distance preference has been changed, move
 			// map to new bounds.
 			if (lastRadius != radius) {
@@ -297,8 +307,11 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	@Override
 	public void onConnected(Bundle bundle) {
 		System.out.println("Connected to location services");
-		currentLocation = getLocation();
-		startPeriodicUpdates();
+		// If the user use hid own location, then update it
+		if(otherLocation == null){
+			currentLocation = getLocation();
+			startPeriodicUpdates();
+		}
 	}
 
 	/*
@@ -353,8 +366,12 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	private Location getLocation() {
 		// If Google Play Services is available
 		if (servicesConnected()) {
-			// Get the current location
-			return locationClient.getLastLocation();
+			if(otherLocation == null){
+				// Get the current location
+				return locationClient.getLastLocation();
+			}else{
+				return otherLocation;
+			}
 		} else {
 			return null;
 		}
@@ -365,7 +382,12 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	 */
 	private void doMapQuery() {
 		final int myUpdateNumber = ++mostRecentMapUpdate;
-		Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
+		Location myLoc;
+		if(otherLocation == null){
+			myLoc = (currentLocation == null) ? lastLocation : currentLocation;
+		}else{
+			myLoc = otherLocation;
+		}
 		// If location info isn't available, clean up any existing markers
 		if (myLoc == null) {
 			cleanUpMarkers(new HashSet<String>());
@@ -502,6 +524,34 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 		LatLngBounds bounds = calculateBoundsWithCenter(myLatLng);
 		// Zoom to the given bounds
 		map.getMap().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
+		
+	    LatLng cor1 = bounds.northeast;
+	    LatLng cor2 = bounds.southwest; 
+	    LatLng cor3 = new LatLng(cor2.latitude, cor1.longitude); 
+	    LatLng cor4 = new LatLng(cor1.latitude, cor2.longitude); 
+	    double width = computeDistanceBetween(cor1,cor3); 
+	    double height = computeDistanceBetween(cor1, cor4);
+	    
+	    radius = Math.max(width, height);
+	    updateCircle(myLatLng);
+	    doMapQuery();
+	    
+	}
+	
+	double rad(double x) {
+		  return x * Math.PI / 180;
+		};
+	
+	double computeDistanceBetween(LatLng p1, LatLng p2){
+		  int R = 6378137; // Earth’s mean radius in meter
+		  double dLat = rad(p2.latitude - p1.latitude);
+		  double dLong = rad(p2.longitude - p1.longitude);
+		  double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+		    Math.cos(rad(p1.latitude)) * Math.cos(rad(p2.latitude)) *
+		    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+		  double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		  double d = R * c;
+		  return d; // returns the distance in meter
 	}
 
 	/*
@@ -511,7 +561,7 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 		// The return offset, initialized to the default difference
 		double latLngOffset = OFFSET_CALCULATION_INIT_DIFF;
 		// Set up the desired offset distance in meters
-		float desiredOffsetInMeters = radius * METERS_PER_FEET;
+		float desiredOffsetInMeters = (float) (m_searchDistance * METERS_PER_FEET);
 		// Variables for the distance calculation
 		float[] distance = new float[1];
 		boolean foundMax = false;
@@ -576,4 +626,5 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 
 		return builder.build();
 	}
+
 }
