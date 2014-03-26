@@ -59,8 +59,7 @@ public class UserArtworkAdapter extends ParseQueryAdapter<Artwork>{
 
 		TextView titleTextView = (TextView) v.findViewById(R.id.text1);
 		titleTextView.setText(artwork.getTitle());
-		TextView ratingTextView = (TextView) v
-				.findViewById(R.id.favorite_artwork_rating);
+		TextView ratingTextView = (TextView) v.findViewById(R.id.favorite_artwork_rating);
 		ratingTextView.setText(artwork.getRating());
 		return v;
 	}

@@ -136,5 +136,10 @@
     <string name="formerTitle">Current:</string>
     <string name="newTitle">New:</string>
     
+    <!-- picture fragment -->
+    <string name="title">Title :</string>
+    <string name="cancel">Cancel</string>
+    <string name="publish">Publish</string>
+    
     
 </resources>

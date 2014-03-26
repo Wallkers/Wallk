@@ -33,8 +33,7 @@ public class GalleryFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 
 		// Set up a progress dialog
-		progressDialog = new ProgressDialog(
-				getActivity());
+		progressDialog = new ProgressDialog(getActivity());
 		mainAdapter = new ParseQueryAdapter<Artwork>(this.getActivity(), Artwork.class);
 		mainAdapter.setTextKey("title");
 		mainAdapter.setImageKey("photo");
@@ -43,6 +42,8 @@ public class GalleryFragment extends ListFragment {
 		favoritesAdapter = new FavoriteArtworkAdapter(this.getActivity());
 		//sort pictures by user
 		userAdapter = new UserArtworkAdapter(this.getActivity());
+		
+		updateArtworkList();
 		
 		return inflater.inflate(R.layout.listfragment_gallery, container, false);
 	}
