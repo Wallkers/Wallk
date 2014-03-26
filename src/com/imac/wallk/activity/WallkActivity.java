@@ -5,9 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.imac.wallk.R;
 import com.imac.wallk.fragment.AccountFragment;
@@ -83,7 +83,7 @@ public class WallkActivity extends FragmentActivity {
 			uncolorMenuIcon();
 			showFragment(this.galleryFrag);
 			this.galleryFrag.updateArtworkList();
-			cameraItem.setIcon(R.drawable.ic_action_view_as_grid_selected);
+			galleryItem.setIcon(R.drawable.ic_action_view_as_grid_selected);
 			break;
 		}
 
@@ -172,5 +172,16 @@ public class WallkActivity extends FragmentActivity {
 
 	public MapFragment getMapFrag() {
 		return mapFrag;
+	}
+	
+	public void logFilesSaved(){//list the files present in our directory
+	    String path = getFilesDir().toString();
+	    Log.d("Files", "Path: " + path);      
+	    String[] fileList = fileList();
+	    Log.d("Files", "Size: "+ fileList.length);
+	    for (int i=0; i < fileList.length; i++)
+	    {
+	        Log.d("Files", "FileName:" + fileList[i]);
+	    }
 	}
 }

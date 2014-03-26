@@ -1,13 +1,18 @@
 package com.imac.wallk.fragment;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -22,6 +27,7 @@ import android.widget.Toast;
 
 import com.imac.wallk.NewArtworkActivity;
 import com.imac.wallk.R;
+import com.imac.wallk.activity.WallkActivity;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
@@ -69,11 +75,28 @@ public class CameraFragment extends Fragment{
 
 					@Override
 					public void onPictureTaken(byte[] data, Camera camera) {
-						saveScaledPhoto(data);
+						//Here we store the picture in local database, because we are not sure the user will save it online
+						//and we pass it to the fragment PictureFragment to display it, we will save it on Parse only if the user wants to publish it
+				        FileOutputStream outStream = null;
+				        try {
+				            // write to local sandbox file system
+				            outStream = getActivity().openFileOutput("temporaryPicture.jpg", 0);
+				            outStream.write(data);
+				            outStream.close();
+				            Log.d(TAG, "onPictureTaken - wrote bytes: " + data.length);
+				            //launch picture fragment to display the picture taken
+				            ((WallkActivity) getActivity()).showFragment(new PictureFragment());
+				        } catch (FileNotFoundException e) {
+				            e.printStackTrace();
+				        } catch (IOException e) {
+				            e.printStackTrace();
+				        } finally {
+				        }
+				        
+				        //debug
+				        ((WallkActivity)getActivity()).logFilesSaved();
 					}
-
 				});
-
 			}
 		});
 

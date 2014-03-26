@@ -41,7 +41,7 @@ public class FavoriteArtworkAdapter extends ParseQueryAdapter<Artwork>{
 	public View getItemView(Artwork artwork, View v, ViewGroup parent) {
 
 		if (v == null) {
-			v = View.inflate(getContext(), R.layout.item_list_favorites, null);
+			v = View.inflate(getContext(), R.layout.item_list_gallery, null);
 		}
 
 		super.getItemView(artwork, v, parent);
@@ -58,11 +58,8 @@ public class FavoriteArtworkAdapter extends ParseQueryAdapter<Artwork>{
 			});
 		}
 
-		TextView titleTextView = (TextView) v.findViewById(R.id.text1);
+		TextView titleTextView = (TextView) v.findViewById(R.id.tag_name);
 		titleTextView.setText(artwork.getTitle());
-		TextView ratingTextView = (TextView) v
-				.findViewById(R.id.favorite_artwork_rating);
-		ratingTextView.setText(artwork.getRating());
 		return v;
 	}
 }

@@ -2,26 +2,24 @@ package com.imac.wallk.fragment;
 
 import java.util.List;
 
-import com.imac.wallk.Artwork;
-import com.imac.wallk.R;
-import com.imac.wallk.adapter.FavoriteArtworkAdapter;
-import com.imac.wallk.adapter.UserArtworkAdapter;
-import com.parse.ParseQueryAdapter;
-import com.parse.ParseQueryAdapter.OnQueryLoadListener;
-import com.parse.ParseException;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.imac.wallk.Artwork;
+import com.imac.wallk.R;
+import com.imac.wallk.adapter.AllArtworkAdapter;
+import com.imac.wallk.adapter.FavoriteArtworkAdapter;
+import com.imac.wallk.adapter.UserArtworkAdapter;
+import com.parse.ParseQueryAdapter.OnQueryLoadListener;
+
 public class GalleryFragment extends ListFragment {
 	
 	//filters
-	private ParseQueryAdapter<Artwork> mainAdapter;
+	private AllArtworkAdapter mainAdapter;
 	private UserArtworkAdapter userAdapter;
 	private FavoriteArtworkAdapter favoritesAdapter;
 	private ProgressDialog progressDialog;
@@ -33,16 +31,15 @@ public class GalleryFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 
 		// Set up a progress dialog
-		progressDialog = new ProgressDialog(
-				getActivity());
-		mainAdapter = new ParseQueryAdapter<Artwork>(this.getActivity(), Artwork.class);
-		mainAdapter.setTextKey("title");
-		mainAdapter.setImageKey("photo");
+		progressDialog = new ProgressDialog(getActivity());
+		mainAdapter = new AllArtworkAdapter(this.getActivity());
 
 		//adapters allow to sort pictures
 		favoritesAdapter = new FavoriteArtworkAdapter(this.getActivity());
 		//sort pictures by user
 		userAdapter = new UserArtworkAdapter(this.getActivity());
+		
+		updateArtworkList();
 		
 		return inflater.inflate(R.layout.listfragment_gallery, container, false);
 	}

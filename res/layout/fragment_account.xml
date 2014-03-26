@@ -1,64 +1,97 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-	    <LinearLayout
-		    android:layout_width="match_parent"
-    		android:layout_height="wrap_content"
-    		android:orientation="horizontal">
-	        <TextView
-			            android:id="@+id/usernameTitle"
-			            android:layout_width="wrap_content"
-			            android:layout_height="wrap_content"
-			            android:text="@string/usernameTitle"
-			            android:paddingBottom="5dp"
-			            android:textSize="12sp" />
-			<TextView
-			           android:id="@+id/username"
-			           android:layout_width="wrap_content"
-			           android:layout_height="wrap_content"
-			           android:paddingBottom="5dp"
-			           android:textSize="12sp" />
-			
-			<Button
-			         android:id="@+id/changeUsername"
-			         android:layout_width="wrap_content"
-			         android:layout_height="wrap_content"
-			         android:paddingBottom="5dp"
-			         android:text="@string/change"
-			         android:textSize="12sp" />
-		</LinearLayout>
-		
-		<LinearLayout
-		    android:layout_width="match_parent"
-    		android:layout_height="wrap_content"
-    		android:orientation="horizontal">
-			<TextView
-			         android:id="@+id/passwordTitle"
-			         android:layout_width="wrap_content"
-			         android:layout_height="wrap_content"
-			         android:paddingBottom="5dp"
-			         android:text="@string/passwordTitle"
-			         android:textSize="12sp" />
-			
-			<TextView
-			            android:id="@+id/password"
-			            android:layout_width="wrap_content"
-			            android:layout_height="wrap_content"
-			            android:paddingBottom="5dp"
-			            android:text="@string/fakePassword"
-			            android:textSize="12sp" />
-			 
-			<Button
-			           android:id="@+id/changePassword"
-			           android:layout_width="wrap_content"
-			           android:layout_height="wrap_content"
-			           android:paddingBottom="5dp"
-			           android:text="@string/change"
-			           android:textSize="12sp" />
-		</LinearLayout>
-		
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-</LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/account_title"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_account" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="top"
+        android:padding="16dp" >
+				
+        <TextView 
+            android:id="@+id/myaccount_title_label"
+             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/account_title"
+            android:paddingBottom="15dp"
+            android:textSize="40sp"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp" >
+
+            <TextView
+                android:id="@+id/usernameTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:text="@string/usernameTitle"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+            		android:layout_marginLeft="15dp"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/changeUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/change"
+                android:textColor="#ffffff"
+            		android:background="#222222"
+            		android:layout_marginLeft="15dp"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/passwordTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:text="@string/passwordTitle"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:text="@string/fakePassword"
+            		android:layout_marginLeft="15dp"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/changePassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+            		android:background="#222222"
+            		android:layout_marginLeft="15dp"
+                android:text="@string/change"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
