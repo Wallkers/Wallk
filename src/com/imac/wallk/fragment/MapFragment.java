@@ -203,37 +203,20 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				// artworks centered on the clicked point
 				map.getMap().setOnMapClickListener(new OnMapClickListener() {
 			        @Override
-			        public void onMapClick(LatLng point) {
+			    	public void onMapClick(LatLng point) {
 			        	otherLocation = new Location("Other");
-			    		otherLocation.setLatitude(point.latitude);
-			    		otherLocation.setLongitude(point.longitude);
+			        	otherLocation.setLatitude(point.latitude);
+			        	otherLocation.setLongitude(point.longitude);
 
-			    		//Create a new research area and animate zoom on its center
-//			    		LatLngBounds bounds = calculateBoundsWithCenter(point);
-//			    	    LatLng cor1 = bounds.northeast;
-//			    	    LatLng cor2 = bounds.southwest; 
-//			    	    LatLng cor3 = new LatLng(cor2.latitude, cor1.longitude); 
-//			    	    LatLng cor4 = new LatLng(cor1.latitude, cor2.longitude); 
-//			    	    float[] width = new float[1];
-//			    	    Location.distanceBetween(cor1.latitude, cor1.longitude, cor3.latitude, cor3.longitude, width); 
-//			    	    float[] height = new float[1];
-//			    	    Location.distanceBetween(cor1.latitude, cor1.longitude, cor4.latitude, cor4.longitude, width);
-			    	    System.out.println("Zoom : " + map.getMap().getCameraPosition().zoom);
-			    	    int zoom = (int) Math.floor(map.getMap().getCameraPosition().zoom);
-			    	    double ratio = GOOGLE_ZOOM_RATIO.get(zoom -1);
-			    	    //System.out.println("MAP says width : " + width[0] + " and height : " + height[0] );
-			    	    if(map.getMap().getCameraPosition().zoom > 5 && map.getMap().getCameraPosition().zoom < 15){
-			    	    	m_searchDistance = ratio/100;
-			  
-			    	    }else{
-			    	    	m_searchDistance = ratio/100;
-			    	    }
-			    	    System.out.println("MAP says search distance = " + m_searchDistance );
-			    	    updateZoom(point);
-			    	    
-			    	    //Update
-			    	    onResume();
-			        }
+			        	//Create a new research area and animate zoom on its center
+			        	int zoom = (int) Math.floor(map.getMap().getCameraPosition().zoom);
+			        	double ratio = GOOGLE_ZOOM_RATIO.get(zoom -1);
+			        	m_searchDistance = ratio/50;
+			        	updateZoom(point);
+
+			        	//Update
+			        	onResume();
+			        	}
 			    });
 		
 		return view;
@@ -497,9 +480,9 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 							}
 						}
 						// Display a red marker with a predefined title and no snippet
-						markerOpts =
-								markerOpts.title(getResources().getString(R.string.post_out_of_range)).icon(
-										BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+//						markerOpts =
+//								markerOpts.title(getResources().getString(R.string.post_out_of_range)).icon(
+//										BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 					} else {
 						// Check for an existing in range marker
 						if (oldMarker != null) {
