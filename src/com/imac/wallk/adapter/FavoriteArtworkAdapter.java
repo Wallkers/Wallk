@@ -5,7 +5,6 @@ import java.util.Arrays;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.imac.wallk.Artwork;
 import com.imac.wallk.R;
@@ -58,8 +57,6 @@ public class FavoriteArtworkAdapter extends ParseQueryAdapter<Artwork>{
 			});
 		}
 
-		TextView titleTextView = (TextView) v.findViewById(R.id.tag_name);
-		titleTextView.setText(artwork.getTitle());
 		return v;
 	}
 }

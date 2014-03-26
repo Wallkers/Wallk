@@ -3,7 +3,6 @@ package com.imac.wallk.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.imac.wallk.Artwork;
 import com.imac.wallk.R;
@@ -11,7 +10,6 @@ import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
-import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 public class AllArtworkAdapter extends ParseQueryAdapter<Artwork> {
@@ -41,8 +39,6 @@ public class AllArtworkAdapter extends ParseQueryAdapter<Artwork> {
 			});
 		}
 
-		TextView titleTextView = (TextView) v.findViewById(R.id.tag_name);
-		titleTextView.setText(artwork.getTitle());
 		return v;
 	}
 }
