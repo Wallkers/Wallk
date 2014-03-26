@@ -3,26 +3,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    android:orientation="vertical"
-    android:padding="10dp" >
+    android:orientation="vertical" >
 
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:divider="#ffffff"
         android:drawSelectorOnTop="false"
-        android:textColor="#ffffff" />
+        android:padding="10dp" />
 
-    <TextView
-        android:id="@id/android:empty"
+    <FrameLayout
+        android:id="@+id/loading_page"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:text="@string/nodata"
-        android:textColor="#ffffff"
-        android:textSize="15sp"
-        android:textStyle="italic" />
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_home" />
+
+        <TextView
+            android:id="@id/android:empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="@string/nodata"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </FrameLayout>
 
 </LinearLayout>

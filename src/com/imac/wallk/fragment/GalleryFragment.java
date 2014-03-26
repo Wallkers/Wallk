@@ -8,6 +8,7 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.imac.wallk.Artwork;
 import com.imac.wallk.R;
@@ -22,14 +23,19 @@ public class GalleryFragment extends ListFragment {
 	private AllArtworkAdapter mainAdapter;
 	private UserArtworkAdapter userAdapter;
 	private FavoriteArtworkAdapter favoritesAdapter;
-	private ProgressDialog progressDialog;
+	private ProgressDialog progressDialog = null;
+	
+	private FrameLayout loadingPage = null;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+		View v = inflater.inflate(R.layout.listfragment_gallery, container, false);
 		super.onCreate(savedInstanceState);
-
+		
+		// Get layout elements
+		loadingPage = (FrameLayout) v.findViewById(R.id.loading_page);
+		
 		// Set up a progress dialog
 		progressDialog = new ProgressDialog(getActivity());
 		mainAdapter = new AllArtworkAdapter(this.getActivity());
@@ -41,7 +47,7 @@ public class GalleryFragment extends ListFragment {
 		
 		updateArtworkList();
 		
-		return inflater.inflate(R.layout.listfragment_gallery, container, false);
+		return v;
 	}
 	
 	public void updateArtworkList() {
@@ -59,6 +65,7 @@ public class GalleryFragment extends ListFragment {
 				@Override
 				public void onLoaded(List<Artwork> objects, Exception e) {
 					progressDialog.dismiss();
+					loadingPage.setVisibility(View.GONE);
 				}
 		});
 
