@@ -11,6 +11,7 @@ import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
+import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 public class AllArtworkAdapter extends ParseQueryAdapter<Artwork> {

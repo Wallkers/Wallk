@@ -1,18 +1,15 @@
 package com.imac.wallk.fragment;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -37,7 +34,6 @@ public class CameraFragment extends Fragment{
 
 	private Camera camera;
 	private SurfaceView surfaceView;
-	private ParseFile photoFile;
 	private ImageButton photoButton;
 
 	@Override
@@ -76,7 +72,7 @@ public class CameraFragment extends Fragment{
 					@Override
 					public void onPictureTaken(byte[] data, Camera camera) {
 						//Here we store the picture in local database, because we are not sure the user will save it online
-						//and we pass it to the fragment PictureFragment to display it, we will save it on Parse only if the user wants to publish it
+						//and we pass it to the fragment PictureConfirmFragment to display it, we will save it on Parse only if the user wants to publish it
 				        FileOutputStream outStream = null;
 				        try {
 				            // write to local sandbox file system
@@ -85,7 +81,8 @@ public class CameraFragment extends Fragment{
 				            outStream.close();
 				            Log.d(TAG, "onPictureTaken - wrote bytes: " + data.length);
 				            //launch picture fragment to display the picture taken
-				            ((WallkActivity) getActivity()).showFragment(new PictureFragment());
+				            ((WallkActivity) getActivity()).showFragment(new PictureConfirmFragment());
+				            
 				        } catch (FileNotFoundException e) {
 				            e.printStackTrace();
 				        } catch (IOException e) {
@@ -128,60 +125,6 @@ public class CameraFragment extends Fragment{
 		});
 
 		return v;
-	}
-
-	/*
-	 * ParseQueryAdapter loads ParseFiles into a ParseImageView at whatever size
-	 * they are saved. Since we never need a full-size image in our app, we'll
-	 * save a scaled one right away.
-	 */
-	private void saveScaledPhoto(byte[] data) {
-
-		// Resize photo from camera byte array
-		Bitmap artworkImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-		Bitmap artworkImageScaled = Bitmap.createScaledBitmap(artworkImage, 200, 200
-				* artworkImage.getHeight() / artworkImage.getWidth(), false);
-
-		// Override Android default landscape orientation and save portrait
-		Matrix matrix = new Matrix();
-		matrix.postRotate(90);
-		Bitmap rotatedScaledArtworkImage = Bitmap.createBitmap(artworkImageScaled, 0,
-				0, artworkImageScaled.getWidth(), artworkImageScaled.getHeight(),
-				matrix, true);
-
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		rotatedScaledArtworkImage.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-
-		byte[] scaledData = bos.toByteArray();
-
-		// Save the scaled image to Parse
-		photoFile = new ParseFile("artwork_photo.jpg", scaledData);
-		photoFile.saveInBackground(new SaveCallback() {
-
-			public void done(ParseException e) {
-				if (e != null) {
-					Toast.makeText(getActivity(),
-							"Error saving: " + e.getMessage(),
-							Toast.LENGTH_LONG).show();
-				} else {
-					addPhotoToArtworkAndReturn(photoFile);
-				}
-			}
-		});
-	}
-
-	/*
-	 * Once the photo has saved successfully, we're ready to return to the
-	 * NewArtworkFragment. When we added the CameraFragment to the back stack, we
-	 * named it "NewArtworkFragment". Now we'll pop fragments off the back stack
-	 * until we reach that Fragment.
-	 */
-	private void addPhotoToArtworkAndReturn(ParseFile photoFile) {
-		((NewArtworkActivity)getActivity()).getCurrentArtwork().setPhotoFile(
-				photoFile);
-		FragmentManager fm = getActivity().getSupportFragmentManager();
-		fm.popBackStack("NewArtworkFragment",
-				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
 	@Override

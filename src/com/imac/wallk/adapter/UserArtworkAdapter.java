@@ -3,10 +3,14 @@ package com.imac.wallk.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.imac.wallk.Artwork;
 import com.imac.wallk.R;
+import com.imac.wallk.activity.WallkActivity;
+import com.imac.wallk.fragment.CameraFragment;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -43,7 +47,7 @@ public class UserArtworkAdapter extends ParseQueryAdapter<Artwork>{
 
 		super.getItemView(artwork, v, parent);
 
-		ParseImageView artworkImage = (ParseImageView) v.findViewById(R.id.icon);
+		final ParseImageView artworkImage = (ParseImageView) v.findViewById(R.id.icon);
 		ParseFile photoFile = artwork.getParseFile("photo");
 		if (photoFile != null) {
 			artworkImage.setParseFile(photoFile);
@@ -54,7 +58,7 @@ public class UserArtworkAdapter extends ParseQueryAdapter<Artwork>{
 				}
 			});
 		}
-
+		
 		TextView titleTextView = (TextView) v.findViewById(R.id.tag_name);
 		titleTextView.setText(artwork.getTitle());
 		return v;

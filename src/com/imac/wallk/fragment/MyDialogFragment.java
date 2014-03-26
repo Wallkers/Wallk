@@ -72,7 +72,6 @@ public class MyDialogFragment extends DialogFragment {
 						manageUsername(formerUsernameContent, newUsernameContent);
 					}
 				});
-				
 				return vUsername;
 				
 			case CHANGE_PASSWORD:
@@ -87,12 +86,21 @@ public class MyDialogFragment extends DialogFragment {
 					@Override
 					public void onClick(View v) {
 						
+						// Set up a progress dialog
+						final ProgressDialog dlg = new ProgressDialog(
+								getActivity());
+						dlg.setTitle("Please wait.");
+						dlg.setMessage("Sending you an email.  Please wait.");
+						dlg.show();
+						
 						ParseUser.getCurrentUser().setEmail(userMail.getText().toString());
 						ParseUser.getCurrentUser().saveInBackground();
 						
 						ParseUser.requestPasswordResetInBackground(userMail.getText().toString(),
                                 new RequestPasswordResetCallback() {
 									public void done(ParseException e) {
+										dlg.dismiss();
+										getDialog().dismiss();
 										if (e != null) {
 											//problem sending email
 											Toast.makeText(getActivity(),
@@ -103,9 +111,9 @@ public class MyDialogFragment extends DialogFragment {
 													getResources().getString(R.string.password_mail_ok),
 													Toast.LENGTH_LONG).show();
 										}
-										
 								}
 						});
+						
 					}
 				});
 				
@@ -170,6 +178,7 @@ public class MyDialogFragment extends DialogFragment {
 					parentActivity.showFragment(new AccountFragment());
 					parentActivity.invalidateOptionsMenu();//recreate the menu now that we are logged
 				}
+				getDialog().dismiss();
 			}
 		});
 		
