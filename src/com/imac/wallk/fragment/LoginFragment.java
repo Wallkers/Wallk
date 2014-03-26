@@ -97,7 +97,9 @@ public class LoginFragment extends Fragment {
 										} else {
 											// change the fragment
 											WallkActivity parentActivity = (WallkActivity) getActivity();
+											parentActivity.getGalleryFrag().showUserArtworks();
 											parentActivity.showFragment(parentActivity.getGalleryFrag());
+											parentActivity.invalidateOptionsMenu();
 										}
 									}
 								});

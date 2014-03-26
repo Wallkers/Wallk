@@ -53,6 +53,7 @@ public class AccountFragment extends Fragment{
 		          dialog.show(getFragmentManager(), "fragmentDialog");
 		  }
 		});
+		 
 		return v;
 	}
 }
