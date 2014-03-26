@@ -54,6 +54,10 @@
             android:label="@string/title_activity_artwork_list" >
         </activity>
         <activity
+            android:name=".CustomMarkerClusteringActivity"
+            android:label="@string/title_activity_custom_marker_clustering" >
+        </activity>
+        <activity
             android:name=".LocationActivity"
             android:label="@string/title_activity_artwork_list" >
         </activity>

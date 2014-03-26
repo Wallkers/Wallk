@@ -10,8 +10,14 @@ import java.util.Map;
 import java.util.Set;
 import java.lang.Math;
 
+import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Picture;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +25,8 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -38,17 +46,29 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
+import com.google.maps.android.ui.IconGenerator;
 import com.imac.wallk.Artwork;
+import com.imac.wallk.MultiDrawable;
 import com.imac.wallk.R;
 import com.parse.FindCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 public class MapFragment extends Fragment implements LocationListener,
 GooglePlayServicesClient.ConnectionCallbacks,
-GooglePlayServicesClient.OnConnectionFailedListener{
+GooglePlayServicesClient.OnConnectionFailedListener,
+ClusterManager.OnClusterClickListener<Artwork>, 
+ClusterManager.OnClusterInfoWindowClickListener<Artwork>, 
+ClusterManager.OnClusterItemClickListener<Artwork>, 
+ClusterManager.OnClusterItemInfoWindowClickListener<Artwork>{
 	/*
 	* Define a request code to send to Google Play services This code is returned in
 	* Activity.onActivityResult
@@ -128,6 +148,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	// Map fragment
 	private SupportMapFragment map;
 	private static View view = null;
+	private ClusterManager<Artwork> mClusterManager;
 
 	// Represents the circle around a map
 	private Circle mapCircle;
@@ -156,6 +177,98 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	// Adapter for the Parse query
 	private ParseQueryAdapter<Artwork> posts;
 	
+	public SupportMapFragment getMap(){
+		return map;
+	}
+	
+	/**
+     * Draws profile photos inside markers (using IconGenerator).
+     * When there are multiple people in the cluster, draw multiple photos (using MultiDrawable).
+     */
+    private class ArtworkRenderer extends DefaultClusterRenderer<Artwork> {
+        private final IconGenerator mIconGenerator = new IconGenerator(getActivity().getBaseContext());
+        private final IconGenerator mClusterIconGenerator = new IconGenerator(getActivity().getBaseContext());
+        private final ImageView mImageView;
+        private final ImageView mClusterImageView;
+        private final int mDimension;
+
+        public ArtworkRenderer() {
+            super(getActivity().getBaseContext(), map.getMap(), mClusterManager);
+
+            View multiProfile = getActivity().getLayoutInflater().inflate(R.layout.multi_profile, null);
+            mClusterIconGenerator.setContentView(multiProfile);
+            mClusterImageView = (ImageView) multiProfile.findViewById(R.id.image);
+
+            mImageView = new ImageView(getActivity().getBaseContext());
+            mDimension = (int) getResources().getDimension(R.dimen.custom_profile_image);
+            mImageView.setLayoutParams(new ViewGroup.LayoutParams(mDimension, mDimension));
+            int padding = (int) getResources().getDimension(R.dimen.custom_profile_padding);
+            mImageView.setPadding(padding, padding, padding, padding);
+            mIconGenerator.setContentView(mImageView);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(Artwork artwork, MarkerOptions markerOptions) {
+            // Draw a single Artwork.
+            // Set the info window to show their name.
+        	ParseImageView artworkImage = new ParseImageView(getActivity().getBaseContext());
+    		ParseFile photoFile = artwork.getParseFile("photo");
+    		if (photoFile != null) {
+    			artworkImage.setParseFile(photoFile);
+    			artworkImage.loadInBackground(new GetDataCallback() {
+    				@Override
+    				public void done(byte[] data, ParseException e) {
+    					// nothing to do
+    				}
+    			});
+    		}
+        	
+            mImageView.setImageResource(artworkImage.getBaseline());
+            Bitmap icon = mIconGenerator.makeIcon();
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon)).title(artwork.getTitle());
+        }
+
+        @Override
+        protected void onBeforeClusterRendered(Cluster<Artwork> cluster, MarkerOptions markerOptions) {
+            // Draw multiple people.
+            // Note: this method runs on the UI thread. Don't spend too much time in here (like in this example).
+            final List<Bitmap> profilePhotos = new ArrayList<Bitmap>(Math.min(4, cluster.getSize()));
+            int width = mDimension;
+            int height = mDimension;
+
+            for (Artwork p : cluster.getItems()) {
+                // Draw 4 at most.
+                if (profilePhotos.size() == 4) break;
+                
+                ParseImageView artworkImage = new ParseImageView(getActivity().getBaseContext());
+        		ParseFile photoFile = p.getParseFile("photo");
+        		if (photoFile != null) {
+        			artworkImage.setParseFile(photoFile);
+        			artworkImage.loadInBackground(new GetDataCallback() {
+        				@SuppressWarnings("deprecation")
+						@Override
+        				public void done(byte[] data, ParseException e) {
+//        					Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+//        					profilePhotos.add(bmp);
+        				}
+        			});
+        		}
+            }
+            MultiDrawable multiDrawable = new MultiDrawable(profilePhotos);
+            multiDrawable.setBounds(0, 0, width, height);
+
+            mClusterImageView.setImageDrawable(multiDrawable);
+            Bitmap icon = mClusterIconGenerator.makeIcon(String.valueOf(cluster.getSize()));
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));
+        }
+
+        @Override
+        protected boolean shouldRenderAsCluster(Cluster cluster) {
+            // Always render clusters.
+            return cluster.getSize() > 1;
+        }
+    }
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -168,7 +281,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		} catch (InflateException e) { 
 			return view;
 		}
-		
+
 		radius = m_searchDistance;
 		lastRadius = radius;
 		
@@ -198,7 +311,8 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 						doMapQuery();
 					}
 				});
-				
+				//Start the clustering
+				start();
 				// When the user click on the map, we lead a new research for 
 				// artworks centered on the clicked point
 				map.getMap().setOnMapClickListener(new OnMapClickListener() {
@@ -209,26 +323,9 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			    		otherLocation.setLongitude(point.longitude);
 
 			    		//Create a new research area and animate zoom on its center
-//			    		LatLngBounds bounds = calculateBoundsWithCenter(point);
-//			    	    LatLng cor1 = bounds.northeast;
-//			    	    LatLng cor2 = bounds.southwest; 
-//			    	    LatLng cor3 = new LatLng(cor2.latitude, cor1.longitude); 
-//			    	    LatLng cor4 = new LatLng(cor1.latitude, cor2.longitude); 
-//			    	    float[] width = new float[1];
-//			    	    Location.distanceBetween(cor1.latitude, cor1.longitude, cor3.latitude, cor3.longitude, width); 
-//			    	    float[] height = new float[1];
-//			    	    Location.distanceBetween(cor1.latitude, cor1.longitude, cor4.latitude, cor4.longitude, width);
-			    	    System.out.println("Zoom : " + map.getMap().getCameraPosition().zoom);
 			    	    int zoom = (int) Math.floor(map.getMap().getCameraPosition().zoom);
 			    	    double ratio = GOOGLE_ZOOM_RATIO.get(zoom -1);
-			    	    //System.out.println("MAP says width : " + width[0] + " and height : " + height[0] );
-			    	    if(map.getMap().getCameraPosition().zoom > 5 && map.getMap().getCameraPosition().zoom < 15){
-			    	    	m_searchDistance = ratio/100;
-			  
-			    	    }else{
-			    	    	m_searchDistance = ratio/100;
-			    	    }
-			    	    System.out.println("MAP says search distance = " + m_searchDistance );
+			    	    m_searchDistance = ratio/50;
 			    	    updateZoom(point);
 			    	    
 			    	    //Update
@@ -254,6 +351,20 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 		super.onStop();
 	}
+	
+	protected void start() {
+    	System.out.println("PLOP");
+        mClusterManager = new ClusterManager<Artwork>(getActivity(), map.getMap());
+        mClusterManager.setRenderer(new ArtworkRenderer());
+        map.getMap().setOnCameraChangeListener(mClusterManager);
+        map.getMap().setOnMarkerClickListener(mClusterManager);
+        map.getMap().setOnInfoWindowClickListener(mClusterManager);
+        mClusterManager.setOnClusterClickListener(this);
+        mClusterManager.setOnClusterInfoWindowClickListener(this);
+        mClusterManager.setOnClusterItemClickListener(this);
+        mClusterManager.setOnClusterItemInfoWindowClickListener(this);
+        mClusterManager.cluster();
+    }
 
 	/*
 	 * Called when the Fragment is restarted, even before it becomes visible.
@@ -451,9 +562,8 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		ParseQuery<Artwork> mapQuery = Artwork.getQuery();
 		// Set up additional query filters
 		mapQuery.whereWithinKilometers("location", myPoint, MAX_POST_SEARCH_DISTANCE);
-		//mapQuery.include("user");
 		mapQuery.orderByDescending("createdAt");
-		//mapQuery.setLimit(MAX_POST_SEARCH_RESULTS);
+		mapQuery.setLimit(MAX_POST_SEARCH_RESULTS);
 		// Kick off the query in the background
 		mapQuery.findInBackground(new FindCallback<Artwork>() {
 			@Override
@@ -462,7 +572,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 					System.out.println("An error occurred while querying for map posts.");
 					return;
 				}
-				System.out.println("size : " + objects.size());
 				/*
 				 * Make sure we're processing results from
 				 * the most recent update, in case there
@@ -471,6 +580,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				if (myUpdateNumber != mostRecentMapUpdate) {
 					return;
 				}
+				System.out.println("NUMBER OF ARTWORKS IN THE AREA : " + objects.size());
 				// Posts to show on the map
 				Set<String> toKeep = new HashSet<String>();
 				// Loop through the results of the search
@@ -497,9 +607,9 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 							}
 						}
 						// Display a red marker with a predefined title and no snippet
-						markerOpts =
-								markerOpts.title(getResources().getString(R.string.post_out_of_range)).icon(
-										BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+//						markerOpts =
+//								markerOpts.title(getResources().getString(R.string.post_out_of_range)).icon(
+//										BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 					} else {
 						// Check for an existing in range marker
 						if (oldMarker != null) {
@@ -512,17 +622,19 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 							}
 						}
 						// Display a green marker with the post information
-						markerOpts =
-								markerOpts.title(post.getTitle()).snippet(post.getTitle())
-								.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+//						markerOpts =
+//								markerOpts.title(post.getTitle()).snippet(post.getTitle())
+//								.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+						//mClusterManager.addItem(post);
 					}
 					// Add a new marker
-					Marker marker = map.getMap().addMarker(markerOpts);
-					mapMarkers.put(post.getObjectId(), marker);
-					if (post.getObjectId().equals(selectedObjectId)) {
-						marker.showInfoWindow();
-						selectedObjectId = null;
-					}
+					mClusterManager.addItem(post);
+//					Marker marker = map.getMap().addMarker(markerOpts);
+//					mapMarkers.put(post.getObjectId(), marker);
+//					if (post.getObjectId().equals(selectedObjectId)) {
+//						marker.showInfoWindow();
+//						selectedObjectId = null;
+					//}
 				}
 				// Clean up old markers.
 				cleanUpMarkers(toKeep);
@@ -650,6 +762,32 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		builder.include(south);
 
 		return builder.build();
+	}
+
+	@Override
+	public void onClusterItemInfoWindowClick(Artwork item) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onClusterItemClick(Artwork item) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onClusterInfoWindowClick(Cluster<Artwork> cluster) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onClusterClick(Cluster<Artwork> cluster) {
+		// Show a toast with some info when the cluster is clicked.
+        String firstName = cluster.getItems().iterator().next().getTitle();
+        Toast.makeText(this.getActivity().getBaseContext(), cluster.getSize() + " (including " + firstName + ")", Toast.LENGTH_SHORT).show();
+        return true;
 	}
 
 }
