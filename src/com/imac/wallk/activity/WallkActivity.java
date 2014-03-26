@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.imac.wallk.R;
 import com.imac.wallk.fragment.AccountFragment;
@@ -83,7 +82,7 @@ public class WallkActivity extends FragmentActivity {
 			uncolorMenuIcon();
 			showFragment(this.galleryFrag);
 			this.galleryFrag.updateArtworkList();
-			cameraItem.setIcon(R.drawable.ic_action_view_as_grid_selected);
+			galleryItem.setIcon(R.drawable.ic_action_view_as_grid_selected);
 			break;
 		}
 
