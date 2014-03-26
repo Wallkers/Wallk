@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.imac.wallk.R;
 import com.imac.wallk.fragment.AccountFragment;
@@ -66,8 +67,15 @@ public class WallkActivity extends FragmentActivity {
 		switch (item.getItemId()) {
 
 		case R.id.action_camera: {
-			showFragment(new CameraFragment());
-			colorMenuIcon(R.drawable.ic_action_camera);
+			//have to be connected to take a picture
+			if (ParseUser.getCurrentUser() != null) {
+				showFragment(new CameraFragment());
+				colorMenuIcon(R.drawable.ic_action_camera);
+			} else {
+				showFragment(this.loginFrag);
+				colorMenuIcon(R.drawable.ic_action_person);
+				Toast.makeText(this, "You have to be connected to take a picture.", Toast.LENGTH_LONG).show();
+			}
 			break;
 		}
 
