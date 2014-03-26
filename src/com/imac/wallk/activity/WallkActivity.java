@@ -39,7 +39,7 @@ public class WallkActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		setupFragments();
-		showFragment(this.galleryFrag);		
+		showFragment(this.galleryFrag);	
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class WallkActivity extends FragmentActivity {
 
 		case R.id.action_gallery: {
 			showFragment(this.galleryFrag);
-			this.galleryFrag.updateArtworkList();
+			this.galleryFrag.showAllArtworks();
 			colorMenuIcon(R.drawable.ic_action_view_as_grid);
 			break;
 		}

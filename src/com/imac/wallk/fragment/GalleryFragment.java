@@ -5,10 +5,15 @@ import java.util.List;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.imac.wallk.Artwork;
 import com.imac.wallk.R;
@@ -26,6 +31,7 @@ public class GalleryFragment extends ListFragment {
 	private ProgressDialog progressDialog = null;
 	
 	private FrameLayout loadingPage = null;
+	private ListView listOfPictures =  null;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,8 +42,21 @@ public class GalleryFragment extends ListFragment {
 		// Get layout elements
 		loadingPage = (FrameLayout) v.findViewById(R.id.loading_page);
 		
-		// Set up a progress dialog
-		progressDialog = new ProgressDialog(getActivity());
+		if(listOfPictures == null){
+			listOfPictures = (ListView)v.findViewById(android.R.id.list);
+		}
+		
+		listOfPictures.setOnItemClickListener(new OnItemClickListener() {
+		public void onItemClick(AdapterView<?> parent, View view,int position, long id) 
+	    {
+	      String selectedFromList = (listOfPictures.getItemAtPosition(position).getClass().toString());
+	      Toast.makeText(
+					getActivity().getApplicationContext(),
+					"type: " + selectedFromList,
+					Toast.LENGTH_SHORT).show();
+
+	    }});
+	    Log.d("coucou", "toi");
 		mainAdapter = new AllArtworkAdapter(this.getActivity());
 
 		//adapters allow to sort pictures
@@ -45,12 +64,16 @@ public class GalleryFragment extends ListFragment {
 		//sort pictures by user
 		userAdapter = new UserArtworkAdapter(this.getActivity());
 		
-		updateArtworkList();
-		
+		if(progressDialog == null){
+			progressDialog = new ProgressDialog(getActivity());
+			//the first time we open the fragment we charge all artworks
+			showAllArtworks();
+		}
+
 		return v;
 	}
 	
-	public void updateArtworkList() {
+	public void showAllArtworks() {
 		// Show progressDialog
 		progressDialog.setTitle("Please wait.");
 		progressDialog.setMessage("Charging all pictures. Please wait.");
@@ -68,7 +91,6 @@ public class GalleryFragment extends ListFragment {
 					loadingPage.setVisibility(View.GONE);
 				}
 		});
-
 		setListAdapter(mainAdapter);
 	}
 
@@ -111,4 +133,5 @@ public class GalleryFragment extends ListFragment {
 		
 		setListAdapter(userAdapter);
 	}
+
 }
